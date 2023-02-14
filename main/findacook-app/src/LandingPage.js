@@ -1,10 +1,8 @@
 import Button from './components/Button'
 import { Link} from 'react-router-dom'
-import { useState } from 'react';
 
 
 const LandingPage = () => {
-    const [currentPage, setCurrentPage] = useState('landing');
     return (   
         <div>
             <br></br>

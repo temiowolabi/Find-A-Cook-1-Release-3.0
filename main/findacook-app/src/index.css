@@ -44,6 +44,9 @@ body {
   margin-bottom: 20px; 
 }
 
+
+/*Buttons*/
+
 #btnGroup { 
   margin-top: 200px;
   width: 25%;
@@ -109,8 +112,6 @@ body {
   right: 5%;
 }
 
-
-
 .btn:focus {
   outline: none;
 }
@@ -123,6 +124,9 @@ body {
   display: block;
   width: 100%;
 }
+
+
+/*Forms*/
 
 .task {
   background: #f4f4f4;
@@ -143,168 +147,6 @@ body {
 
 .add-form {
   margin-bottom: 40px;
-}
-
-#verifyForm form{
-  max-height: 500px;
-}
-
-
-#loginForm{
-  background-color: lightgray;
-  border: black 2px solid;
-  border-radius: 5%;
-  margin-top: 1%;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35%;
-  height: 80%;
-  min-height: 750px;
-  margin-bottom: 4%;
-  text-align: center;
-}
-
-#loginForm h2{
-  font-size: large;
-}
-
-#loginForm h3{
-  font-size: large;
-}
-
-#regisForm{
-  background-color: lightgray;
-  border: black 2px solid;
-  border-radius: 5%;
-  margin-top: 1%;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35%;
-  height: 80%;
-  min-height: 750px;
-  margin-bottom: 4%;
-  text-align: center;
-}
-
-#regisForm h3{
-  font-size: large;
-}
-
-#verifyForm{
-  background-color: lightgray;
-  border: black 2px solid;
-  border-radius: 5%;
-  margin-top: 1%;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35%;
-  min-height: 600px;
-  margin-bottom: 4%;
-  text-align: center;
-}
-
-#termsForm{
-  background-color: lightgray;
-  border: black 2px solid;
-  border-radius: 5%;
-  margin-top: 1%;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35%;
-  height: 80%;
-  min-height: 760px;
-  margin-bottom: 4%;
-  text-align: center;
-}
-
-#documentform {
-  background-color: lightgray;
-  border: black 2px solid;
-  border-radius: 5%;
-  margin-top: 1%;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35%;
-  height: 80%;
-  min-height: 750px;
-  margin-bottom: 4%;
-  display: block;
-  text-align: center;
-  
-}
-
-#documentform input[type=file] {
-  display: none;
-
-}
-
-#documentform .uploadbutton {
-  display: block;
-  background-color: #086688;
-  color: white;
-  border: 1px #086688 solid;
-  border-radius: 10px;
-  margin: auto;
-  width: 30%;
-}
-
-#documentform .uploadbutton:hover {
-  cursor: pointer;
-}
-
-#documentform #submit {
-  padding: 10px;
-  display: block;
-  background-color: #086688;
-  color: white;
-  border: 1px #086688 solid;
-  border-radius: 10px;
-  margin: auto;
-  width: 15%;
-  position: relative;
-  bottom: -20px;
-}
-#documentform #submit:hover {
-  cursor: pointer;
-}
-
-#cookdash {
-  background-color: lightgray;
-  border: black 2px solid;
-  margin-right: auto;
-  margin-left: auto;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  max-width: 1450px;
-  margin-bottom: 4%;
-  display: block;
-  text-align: center;
-}
-
-.sidebar-open {
-  transform: translateX(300px);
-}
-
-#cookdashimg {
-  max-width: 100%;
-}
-
-#cookimgdiv {
-  float: left;
-  display: block;
-  width: 25%;
-}
-
-#cookname {
-  display: block;
-  text-align: left;
-  margin-left: 20px;
-}
-
-
-.loginForm {
-  margin-left: 10%;
 }
 
 .form-control {
@@ -344,6 +186,39 @@ footer {
   text-align: center;
 }
 
+.formInput {
+  background-color: white;
+}
+
+
+/*LoginPage*/
+
+#loginForm{
+  background-color: lightgray;
+  border: black 2px solid;
+  border-radius: 5%;
+  margin-top: 1%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 35%;
+  height: 80%;
+  min-height: 750px;
+  margin-bottom: 4%;
+  text-align: center;
+}
+
+.loginForm {
+  margin-left: 10%;
+}
+
+#loginForm h2{
+  font-size: large;
+}
+
+#loginForm h3{
+  font-size: large;
+}
+
 #loginLogo{
   display: inline;
   background-color: #1f3744;
@@ -356,12 +231,122 @@ footer {
   margin-top: 25px;
 }
 
+#remPass{
+  float:left;
+  display: flex;
+  position: relative;
+}
+
+#remPass p{
+  float:left;
+  display: flex;
+  position: absolute;
+  left: 80%;
+  width: 40%;
+}
+
+#twitLogin {
+  float:left;
+  display: block;
+  position: absolute;
+  left: 38.4%;
+  top:81%;
+  width: 65px;
+  height: 65px;
+}
+
+#fbLogin {
+  float:left;
+  display: block;
+  position: absolute;
+  left: 48.4%;
+  top:81%;
+  width: 65px;
+  height: 65px;
+}
+
+#gooLogin {
+  float:left;
+  display: block;
+  position: absolute;
+  left: 58.4%;
+  top:81%;
+  width: 65px;
+  height: 65px;
+}
+
+
+/*RegistrationPage*/
+
+#regisForm{
+  background-color: lightgray;
+  border: black 2px solid;
+  border-radius: 5%;
+  margin-top: 1%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 35%;
+  height: 80%;
+  min-height: 750px;
+  margin-bottom: 4%;
+  text-align: center;
+}
+
 #regPhone {
   background-color: white;
 }
+#regisForm h3{
+  font-size: large;
+}
 
-.formInput {
-  background-color: white;
+#fbSign {
+  float:left;
+  display: block;
+  position: absolute;
+  left: 48.4%;
+  top:84%;
+  width: 65px;
+  height: 65px;
+}
+
+#twitSign {
+  float:left;
+  display: block;
+  position: absolute;
+  left: 38.4%;
+  top:84%;
+  width: 65px;
+  height: 65px;
+}
+
+#gooSign {
+  float:left;
+  display: block;
+  position: absolute;
+  left: 58.4%;
+  top:84%;
+  width: 65px;
+  height: 65px;
+}
+
+
+/*VerifyPage*/
+
+#verifyForm{
+  background-color: lightgray;
+  border: black 2px solid;
+  border-radius: 5%;
+  margin-top: 1%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 35%;
+  min-height: 600px;
+  margin-bottom: 4%;
+  text-align: center;
+}
+
+#verifyForm form{
+  max-height: 500px;
 }
 
 #verifyCodes{
@@ -384,6 +369,23 @@ footer {
   width: 50px;
   height: 50px;
 } 
+
+
+/*TermsPage*/
+
+#termsForm{
+  background-color: lightgray;
+  border: black 2px solid;
+  border-radius: 5%;
+  margin-top: 1%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 35%;
+  height: 80%;
+  min-height: 760px;
+  margin-bottom: 4%;
+  text-align: center;
+}
 
 #termsBox{
   height: 500px;
@@ -417,79 +419,94 @@ footer {
   left: 42%;
 }
 
-#remPass{
-  float:left;
-  display: flex;
+
+/*uploadDocuments*/
+
+#documentform {
+  background-color: lightgray;
+  border: black 2px solid;
+  border-radius: 5%;
+  margin-top: 1%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 35%;
+  height: 80%;
+  min-height: 750px;
+  margin-bottom: 4%;
+  display: block;
+  text-align: center;
+}
+
+#documentform input[type=file] {
+  display: none;
+}
+
+#documentform .uploadbutton {
+  display: block;
+  background-color: #086688;
+  color: white;
+  border: 1px #086688 solid;
+  border-radius: 10px;
+  margin: auto;
+  width: 30%;
+}
+
+#documentform .uploadbutton:hover {
+  cursor: pointer;
+}
+
+#documentform #submit {
+  padding: 10px;
+  display: block;
+  background-color: #086688;
+  color: white;
+  border: 1px #086688 solid;
+  border-radius: 10px;
+  margin: auto;
+  width: 15%;
   position: relative;
+  bottom: -20px;
 }
 
-#remPass p{
-  float:left;
-  display: flex;
-  position: absolute;
-  left: 80%;
-  width: 40%;
+#documentform #submit:hover {
+  cursor: pointer;
 }
 
-#twitLogin {
-  float:left;
+
+/*CookDashboard*/
+
+#cookdash {
+  background-color: lightgray;
+  border: black 2px solid;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  max-width: 1450px;
+  margin-bottom: 4%;
   display: block;
-  position: absolute;
-  left: 38.4%;
-  top:81%;
-  width: 65px;
-  height: 65px;
+  text-align: center;
 }
 
-#twitSign {
-  float:left;
-  display: block;
-  position: absolute;
-  left: 38.4%;
-  top:84%;
-  width: 65px;
-  height: 65px;
+#cookdashimg {
+  max-width: 100%;
 }
 
-#fbLogin {
-  float:left;
+#cookimgdiv {
+  float: left;
   display: block;
-  position: absolute;
-  left: 48.4%;
-  top:81%;
-  width: 65px;
-  height: 65px;
+  width: 25%;
 }
 
-#fbSign {
-  float:left;
+#cookname {
   display: block;
-  position: absolute;
-  left: 48.4%;
-  top:84%;
-  width: 65px;
-  height: 65px;
+  text-align: left;
+  margin-left: 20px;
 }
 
-#gooLogin {
-  float:left;
-  display: block;
-  position: absolute;
-  left: 58.4%;
-  top:81%;
-  width: 65px;
-  height: 65px;
-}
 
-#gooSign {
-  float:left;
-  display: block;
-  position: absolute;
-  left: 58.4%;
-  top:84%;
-  width: 65px;
-  height: 65px;
-}
+/*Navbar/Sidebar*/
 
 .navbar {
   background-color: #333;
@@ -532,6 +549,9 @@ footer {
   transition: left 0.5s ease-in-out;
 }
 
+.sidebar-open {
+  transform: translateX(300px);
+}
 .navbar-list {
   list-style: none;
   margin: 0;
@@ -571,6 +591,9 @@ footer {
   position: relative;
   left: 67%;
 }
+
+
+/*CookProfile*/
 
 .card-container {
   width: 1000px;
@@ -641,6 +664,9 @@ footer {
    color: #00F
 }
 
+
+/*ViewCooks*/
+
 #viewcooks {
   background-color: lightgray;
   border: black 2px solid;
@@ -657,7 +683,6 @@ footer {
   z-index: -1;
   overflow-y: scroll;
 }
-
 
 #cooklist h2 {
   padding-left: 1%;

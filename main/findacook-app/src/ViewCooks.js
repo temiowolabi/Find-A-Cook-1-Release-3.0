@@ -9,12 +9,15 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
+import HamburgNavbar from './components/HamburgNavbar';
 
 function ViewCooks() {
 
 
     return (
-        <><BackButton />
+        <>
+        <HamburgNavbar />
+        <BackButton />
         <div id='viewcooks'>
             <br />
             <h1>List of Cooks</h1>

@@ -41,37 +41,8 @@ function CookProfile() {
     setIsEditing(false);
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-const [clicksOutside, setClicksOutside] = useState(0);
-const navbarRef = React.useRef(null);
-const [selectedFile, setSelectedFile] = useState();
-
-const handleClickOutside = event => {
-  if (navbarRef.current && !navbarRef.current.contains(event.target)) {
-    setClicksOutside(clicksOutside + 1);
-  }
-};
-
-React.useEffect(() => {
-  document.addEventListener("click", handleClickOutside);
-  return () => {
-    document.removeEventListener("click", handleClickOutside);
-  };
-});
-
-React.useEffect(() => {
-  if (clicksOutside > 0) {
-    setIsOpen(false);
-    setClicksOutside(0);
-  }
-}, [clicksOutside]);
-
-const changeHandler = (event) => {
-  setSelectedFile(event.target.files[0]);
-};
-
   return (
-    <><HamburgNavbar setIsOpen={setIsOpen}/>
+    <><HamburgNavbar/>
     <Container id="profileBG">
       <Row>
         <Col xs={3}>
