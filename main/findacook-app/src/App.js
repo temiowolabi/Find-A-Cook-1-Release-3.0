@@ -28,6 +28,7 @@ import TermsPage from './TermsPage';
 import CookProfile from './CookProfile';
 import ViewCooks from './ViewCooks';
 
+
 import VerificationPage from './VerificationPage';
 import CookRegPage from './CookRegPage'
 import CompleteForm from './CompleteForm';
