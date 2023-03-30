@@ -8,6 +8,42 @@ const {v4:uuid} = require("uuid");
 const MenuCategorySchema = require('./../models/MenuCategory');
 const MenuItemSchema = require('./../models/Menu')
 const multer = require('multer');
+const aws = require("aws-sdk");
+const multerS3 = require('multer-s3');
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
+const { uploadFile, getFileStream } = require('./s3')
+const upload2 = multer({ dest: '../uploads/' })
+
+
+router.get('/images/:key', (req, res) => {
+  console.log(req.params)
+  const key = req.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(res)
+})
+
+router.post('/images', upload2.single('image'), async (req, res) => {
+  const file = req.file
+  console.log(file)
+
+  // apply filter
+  // resize 
+
+  const result = await uploadFile(file, 'images')
+  await unlinkFile(file.path)
+  console.log(result)
+  const description = req.body.description
+  res.send({imagePath: `/images/${result.Key}`})
+})
+
+// const s3 = new aws.S3({
+//   accessKeyId: process.env.S3_ACCESS_KEY,
+//   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+//   region: process.env.S3_BUCKET_REGION,
+// })
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -17,6 +53,19 @@ const storage = multer.diskStorage({
       cb(null, Date.now() + '-' + file.originalname);
     },
   });
+
+  // const documentUpload = (bucketName) => multer({
+  //   storage: multerS3({
+  //     s3,
+  //     bucket: bucketName,
+  //     metadata: function (req, file, cb) {
+  //       cb(null, { fieldName: file.fieldName });
+  //     },
+  //     key: function (req, file, cb) {
+  //       cb(null, Date.now().toString())
+  //     }
+  //   })
+  // })
   
   const upload = multer({ storage: storage });
 
@@ -37,6 +86,8 @@ let transporter = nodemailer.createTransport({
 
 const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+
 
 router.post('/cooksignup', (req, res) => {
     const { cook_email, cook_first_name, cook_last_name, cook_password, cook_birthday } = req.body;
@@ -319,11 +370,6 @@ router.put("/editprofile", (req, res) => {
       });
     }
   });
-  
-  
-
-
-
 
   
   router.post('/verify_cook', async (req, res) => {
@@ -348,7 +394,17 @@ router.put("/editprofile", (req, res) => {
   });
 
   
+  // router.post('/documents', documentUpload("findacook-bucket").single("document"), async (req, res, next) =>{
+  //   console.log(req.file);
   
+  //   if (!req.file) {
+  //     return res.status(400).json({ success: false, message: "File upload failed" });
+  //   }
+  
+  //   console.log(req.file)
+  
+  //   res.status(200).json({ success: true, message: "File uploaded successfully", url: req.file.location });
+  // })
 
 module.exports = router;
 // router.post('cooklogout', (req, res) => {
