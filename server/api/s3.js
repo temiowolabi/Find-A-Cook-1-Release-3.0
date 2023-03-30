@@ -26,7 +26,7 @@ const s3 = new S3({
   
     return s3.upload(uploadParams).promise()
   }
-  function uploadToS3(file, folderName) {
+  function uploadToS3(file, folderName, cook_id) {
     if (!file || !file.originalname) {
       throw new Error('File not provided');
     }
@@ -34,8 +34,11 @@ const s3 = new S3({
     // Setting up S3 upload parameters
     const params = {
       Bucket: bucketName,
-      Key: `${folderName}/${file.originalname}`,
+      Key: `${folderName}/${cook_id}-${file.originalname}`,
       Body: file.buffer,
+      Metadata: {
+        cook_id: cook_id, // add cookId as metadata
+      },
     };
   
     // Uploading files to the bucket

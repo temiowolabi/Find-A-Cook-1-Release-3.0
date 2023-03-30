@@ -61,34 +61,10 @@ const CompleteForm = () => {
         <section className="personal-form-section">
           <h2>Personal Information</h2>
           <form encType="multipart/form-data" method="POST" action="/cook/documents" onSubmit={submit} className="personal-form">
-        {/* <label>Hazard Analysis and Critical Control Points (HAACP) Certification</label>
-        <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Hazard Analysis and Critical Control Points (HAACP) Certification" /> <br />
-        <label>Munual Handling Certification</label>
-        <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Munual Handling Certification" /> 
-        <label for="insurance">Insurance</label>
-        <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Insurance" /> <br />
-        <p>Don't have insurance? <a href="https://cookinsurance.cc/">Get insured today!</a></p> */}
         <label for="other">Other</label>
         <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Other" accept=".pdf" /> <br />
 
 
-        {/* TODO: GARDA VETTING + DISTANCE OPTION */}
-
-        {/* <label>What is your speciality?</label>
-        <select 
-                      className="form-control"
-                      name='category'>
-                        <option>Choose One...</option>
-                        {categories &&
-                          categories.map((c) => (
-                            <option key={c._id} value={c._id}>
-                              {c.category_name}
-                            </option>
-                          ))}
-                      </select> */}
-
-
-        {/* <textarea name="" id="" cols="30" rows="10" placeholder="Why do you want to become a cook?"></textarea> */}
         <a href="/submit"><button className="applicationBtn">Apply</button></a>
 
       </form>

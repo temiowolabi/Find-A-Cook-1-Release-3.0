@@ -15,9 +15,6 @@ const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 const { uploadFile, getFileStream, uploadToS3 } = require('./s3')
 const upload2 = multer({ dest: '../uploads/' })
-const haacpUpload = multer({ dest: 'uploads/documents/' });
-const gardaVettingUpload = multer({ dest: 'uploads/garda_vetting/' });
-const insuranceProofUpload = multer({ dest: 'uploads/insurance_proof/' });
 const storageTest = multer.memoryStorage();
 const documentUpload = multer({ storage: storageTest });
 
@@ -45,26 +42,31 @@ router.post('/images', upload2.single('image'), async (req, res) => {
 });
 
 
-router.post('/documents', documentUpload.array('document'), async (req, res) => {
-  try {
-    const files = req.files;
-    console.log('Console: ',req.files);
-    const result = [];
+// router.post('/documents', documentUpload.array('document'), async (req, res) => {
+//   try {
+//     const files = req.files;
+//     console.log('Console: ',req.files);
+//     const result = [];
 
-    for (const file of files) {
-      const filePath = file.path; // extract the file path from the uploaded file object
-      console.log("req.files:", req.files);
-      console.log("req.files.document:", req.files.document);
-      const uploadResult = await uploadToS3(file, 'document'); // pass the file path to the uploadToS3 function
-      result.push(uploadResult);
-    }
+//     const cookId = req.session.cook_id; // get the cookId from the session
+//     console.log("COOK ID YALL",cookId);
 
-    res.json({ message: 'Documents uploaded successfully', data: result });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to upload documents' });
-  }
-});
+//     for (const file of files) {
+//       console.log("req.files:", req.files);
+//       console.log("req.files.document:", req.files.document);
+      
+//       const filename = `${cookId}_${file.originalname}`; // include cookId in the filename
+//       const uploadResult = await uploadToS3(file, 'document', filename); // pass the filename to the uploadToS3 function
+//       result.push(uploadResult);
+//     }
+
+//     res.json({ message: 'Documents uploaded successfully', data: result });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Failed to upload documents' });
+//   }
+// });
+
 
 
 // const s3 = new aws.S3({
@@ -422,17 +424,31 @@ router.put("/editprofile", (req, res) => {
   });
 
   
-  // router.post('/documents', documentUpload("findacook-bucket").single("document"), async (req, res, next) =>{
-  //   console.log(req.file);
+  router.post('/documents', documentUpload.array('document'), async (req, res) => {
+    try {
+      const files = req.files;
+      console.log('Console: ',req.files);
+      const result = [];
+      console.log("REQ SESSION OBJECT: ", req.session);
+      const cook = req.session.cook;
+      // const cookId = req.session.cook_first_name; // get the cookId from the session
+      // console.log("COOK ID YALL",cookId);
   
-  //   if (!req.file) {
-  //     return res.status(400).json({ success: false, message: "File upload failed" });
-  //   }
+      for (const file of files) {
+        console.log("req.files:", req.files);
+        console.log("req.files.document:", req.files.document);
+        
+        const filename = `${cook._id}_${file.originalname}`; // include cookId in the filename
+        const uploadResult = await uploadToS3(file, 'document', filename); // pass the filename to the uploadToS3 function
+        result.push(uploadResult);
+      }
   
-  //   console.log(req.file)
-  
-  //   res.status(200).json({ success: true, message: "File uploaded successfully", url: req.file.location });
-  // })
+      res.json({ message: 'Documents uploaded successfully', data: result });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to upload documents' });
+    }
+  });
 
 module.exports = router;
 // router.post('cooklogout', (req, res) => {
