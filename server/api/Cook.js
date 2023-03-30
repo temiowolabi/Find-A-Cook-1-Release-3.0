@@ -448,7 +448,11 @@ router.put("/editprofile", (req, res) => {
           from,
           to: 'temiowolabi8@gmail.com',
           subject: 'New Document Uploaded',
-          html: `Cook ${cook.cook_first_name} ${cook.cook_last_name} (ID: ${cook._id}) has uploaded a new document: ${filename}`
+          html: `Cook ${cook.cook_first_name} ${cook.cook_last_name} (ID: ${cook._id}) has uploaded a new document: ${filename}`,
+          attachments: req.files.map(file => ({
+            filename: file.originalname,
+            content: file.buffer
+          }))
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
