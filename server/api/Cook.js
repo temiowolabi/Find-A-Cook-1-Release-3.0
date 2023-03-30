@@ -114,6 +114,8 @@ let transporter = nodemailer.createTransport({
     },
 });
 
+
+
 const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -429,10 +431,9 @@ router.put("/editprofile", (req, res) => {
       const files = req.files;
       console.log('Console: ',req.files);
       const result = [];
-      console.log("REQ SESSION OBJECT: ", req.session);
       const cook = req.session.cook;
-      // const cookId = req.session.cook_first_name; // get the cookId from the session
-      // console.log("COOK ID YALL",cookId);
+      const fromEmail = cook.cook_email;
+      const from = `Your Cooks <${fromEmail}>`;
   
       for (const file of files) {
         console.log("req.files:", req.files);
@@ -441,6 +442,23 @@ router.put("/editprofile", (req, res) => {
         const filename = `${cook._id}_${file.originalname}`; // include cookId in the filename
         const uploadResult = await uploadToS3(file, 'document', filename); // pass the filename to the uploadToS3 function
         result.push(uploadResult);
+
+
+        const mailOptions = {
+          from,
+          to: 'temiowolabi8@gmail.com',
+          subject: 'New Document Uploaded',
+          html: `Cook ${cook.cook_first_name} ${cook.cook_last_name} (ID: ${cook._id}) has uploaded a new document: ${filename}`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+      
       }
   
       res.json({ message: 'Documents uploaded successfully', data: result });
@@ -449,6 +467,10 @@ router.put("/editprofile", (req, res) => {
       res.status(500).json({ error: 'Failed to upload documents' });
     }
   });
+
+
+
+  
 
 module.exports = router;
 // router.post('cooklogout', (req, res) => {
