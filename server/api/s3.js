@@ -26,9 +26,26 @@ const s3 = new S3({
   
     return s3.upload(uploadParams).promise()
   }
+  function uploadToS3(file, folderName) {
+    if (!file || !file.originalname) {
+      throw new Error('File not provided');
+    }
   
+    // Setting up S3 upload parameters
+    const params = {
+      Bucket: bucketName,
+      Key: `${folderName}/${file.originalname}`,
+      Body: file.buffer,
+    };
+  
+    // Uploading files to the bucket
+    return s3.upload(params).promise();
+  }
+  
+
   
   exports.uploadFile = uploadFile
+  exports.uploadToS3 = uploadToS3
   
   
   // downloads a file from s3

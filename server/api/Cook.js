@@ -13,9 +13,15 @@ const multerS3 = require('multer-s3');
 const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
-const { uploadFile, getFileStream } = require('./s3')
+const { uploadFile, getFileStream, uploadToS3 } = require('./s3')
 const upload2 = multer({ dest: '../uploads/' })
+const haacpUpload = multer({ dest: 'uploads/documents/' });
+const gardaVettingUpload = multer({ dest: 'uploads/garda_vetting/' });
+const insuranceProofUpload = multer({ dest: 'uploads/insurance_proof/' });
+const storageTest = multer.memoryStorage();
+const documentUpload = multer({ storage: storageTest });
 
+// const upload = multer({ storage: storage });
 
 router.get('/images/:key', (req, res) => {
   console.log(req.params)
@@ -26,9 +32,8 @@ router.get('/images/:key', (req, res) => {
 })
 
 router.post('/images', upload2.single('image'), async (req, res) => {
-  const file = req.file
-  console.log(file)
-
+  const file = req.file;
+  console.log(file); // add this line to see if file is being received
   // apply filter
   // resize 
 
@@ -37,7 +42,30 @@ router.post('/images', upload2.single('image'), async (req, res) => {
   console.log(result)
   const description = req.body.description
   res.send({imagePath: `/images/${result.Key}`})
-})
+});
+
+
+router.post('/documents', documentUpload.array('document'), async (req, res) => {
+  try {
+    const files = req.files;
+    console.log('Console: ',req.files);
+    const result = [];
+
+    for (const file of files) {
+      const filePath = file.path; // extract the file path from the uploaded file object
+      console.log("req.files:", req.files);
+      console.log("req.files.document:", req.files.document);
+      const uploadResult = await uploadToS3(file, 'document'); // pass the file path to the uploadToS3 function
+      result.push(uploadResult);
+    }
+
+    res.json({ message: 'Documents uploaded successfully', data: result });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to upload documents' });
+  }
+});
+
 
 // const s3 = new aws.S3({
 //   accessKeyId: process.env.S3_ACCESS_KEY,
@@ -67,8 +95,8 @@ const storage = multer.diskStorage({
   //   })
   // })
   
-  const upload = multer({ storage: storage });
 
+  const upload = multer({ storage: storage });
 
 require('dotenv').config();
 
