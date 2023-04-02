@@ -14,7 +14,7 @@ const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 const { uploadFile, getFileStream, uploadToS3 } = require('./s3')
-const upload2 = multer({ dest: '../uploads/' })
+const upload2 = multer({ dest: '/uploads/' })
 const storageTest = multer.memoryStorage();
 const documentUpload = multer({ storage: storageTest });
 
@@ -473,7 +473,28 @@ router.put("/editprofile", (req, res) => {
   });
 
 
-
+  router.put('/:id/applicationstatus', async (req, res) => {
+    const { id } = req.params;
+    const { application_status } = req.body;
+    try {
+      const cook = await Cook.findById(id);
+      if (!cook) {
+        return res.status(404).json({ error: 'Cook not found' });
+      }
+      if (!application_status) {
+        return res.status(400).json({ error: 'Invalid application status' });
+      }
+      cook.application_status = application_status;
+      await cook.save();
+      res.json({ message: 'Application status updated successfully', data: cook });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to update application status' });
+    }
+  });
+  
+  
+  
   
 
 module.exports = router;
