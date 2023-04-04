@@ -473,9 +473,30 @@ router.put("/editprofile", (req, res) => {
   });
 
 
+  // router.put('/:id/applicationstatus', async (req, res) => {
+  //   const { id } = req.params;
+  //   const { application_status } = req.body;
+  //   try {
+  //     const cook = await Cook.findById(id);
+  //     if (!cook) {
+  //       return res.status(404).json({ error: 'Cook not found' });
+  //     }
+  //     if (!application_status) {
+  //       return res.status(400).json({ error: 'Invalid application status' });
+  //     }
+  //     cook.application_status = application_status;
+  //     await cook.save();
+  //     res.json({ message: 'Application status updated successfully', data: cook });
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).json({ error: 'Failed to update application status' });
+  //   }
+  // });
+  
+
   router.put('/:id/applicationstatus', async (req, res) => {
     const { id } = req.params;
-    const { application_status } = req.body;
+    const { application_status, reason_for_decline } = req.body;
     try {
       const cook = await Cook.findById(id);
       if (!cook) {
@@ -484,7 +505,29 @@ router.put("/editprofile", (req, res) => {
       if (!application_status) {
         return res.status(400).json({ error: 'Invalid application status' });
       }
+      console.log(cook.cook_email)
       cook.application_status = application_status;
+      console.log(application_status, reason_for_decline);
+      if (application_status === 'declined' && reason_for_decline) {
+        const mailOptions = {
+          from: process.env.AUTH_EMAIL,
+          to: cook.cook_email,
+          subject: 'Your application has been declined',
+          text: `Dear ${cook.cook_first_name},\n\nWe regret to inform you that your application has been declined due to the following reason: ${reason_for_decline}.\n\nThank you for your interest in Find-A-Cook.\n\nBest regards,\nThe Find-A-Cook team`
+        };
+        console.log('Before transporter.sendMail');
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Failed to send email' });
+          } else {
+            console.log(`Email sent: ${info.response}`);
+            console.log("YO YO YO",info);
+            res.json({ message: 'Application status updated successfully', data: cook });
+          }
+        });
+        console.log('After transporter.sendMail');
+      }
       await cook.save();
       res.json({ message: 'Application status updated successfully', data: cook });
     } catch (err) {
@@ -492,7 +535,6 @@ router.put("/editprofile", (req, res) => {
       res.status(500).json({ error: 'Failed to update application status' });
     }
   });
-  
   
   
   
