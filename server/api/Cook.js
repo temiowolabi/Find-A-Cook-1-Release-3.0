@@ -528,6 +528,23 @@ router.put("/editprofile", (req, res) => {
         });
         console.log('After transporter.sendMail');
       }
+
+      if (application_status === 'approved') {
+        const mailOptions = {
+          from: process.env.AUTH_EMAIL,
+          to: cook.cook_email,
+          subject: "Your application has been approved",
+          html: `<p>Congratulations! Your application has been approved. Please visit <a href='http://localhost:3000/subscription'>this page</a> to complete your registration.</p>`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error("Error sending email:", error);
+          } else {
+            console.log("Email sent successfully:", info.response);
+          }
+        });
+      }
       await cook.save();
       res.json({ message: 'Application status updated successfully', data: cook });
     } catch (err) {
