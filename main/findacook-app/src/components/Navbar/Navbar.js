@@ -41,24 +41,37 @@ function Navbar() {
 
 	return (
 		<>
-		<header>
-			{/* <div className='navLogo'>
-            <img src="../images/logo-new-edit-01.png"/>
-            </div>  */}
-            {/* <h3>Find A Cook</h3> */}
+
+
+<nav className='nav-bar'>
+            <div className='nav-container'>
+            <a href='/'>
+            <img src="../images/logo-new-edit-01.png" className='navLogo'/>
+            </a>
+            <ul class="nav-links">
+      <li><a href="#">Discover Cooks</a></li>
+      <li><a href="#">My Bookings</a></li>
+      <li><a href="#"><FaShoppingCart />{' '} ({cart.length})</a></li>
+      {/* <li><a href="#">FAQ</a></li>
+      <li><a href="#">Contact Us</a></li> */}
+      {/* <li><a href="#">{firstname}</a></li> */}
+      <li><a href="#" class="login">Log Out</a></li>
+    </ul>
+            </div>
+
+        </nav>
+		{/* <header>
+
             <a href='/'>
             <img src="/images/logo-new-edit-01.png"/>
             </a>
-            {/* <img src="../images/logo-new-edit-01.png"/> */}
+ 
 			<nav ref={navRef}>
 
 <h5>{firstname}</h5>
 				<a href="/home">Discover Cooks</a>
 				<a href="/#">My Bookings</a>
-				{/* <a href="/#">Temi</a> */}
 
-
-                {/* name of user */}
 
 
                 <Link to='/cart'>
@@ -66,9 +79,7 @@ function Navbar() {
                 </Link>{' '}
 
                 <LogoutButton/>
-				{/* <a href="/#"><FaShoppingCart /></a> */}
-				{/* <Link onClick={handleShow}><FaShoppingCart />Cart ({productsCount} Items)</Link> */}
-				{/* <button><FaShoppingCart /></button> */}
+
 				<button
 					className="nav-btn nav-close-btn"
 					onClick={showNavbar}>
@@ -78,7 +89,7 @@ function Navbar() {
 			<button className="nav-btn" onClick={showNavbar}>
 				<FaBars />
 			</button>
-		</header>
+		</header> */}
 
 {/* <Modal show={show} onHide={handleClose}>
 <Modal.Header closeButton>
