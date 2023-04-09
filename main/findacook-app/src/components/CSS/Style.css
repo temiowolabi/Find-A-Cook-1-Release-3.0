@@ -1702,3 +1702,18 @@ label {
   .cookaddfood button[type="submit"]:hover {
 	background-color: #a1e246;
   }
+
+
+
+  .cookaddfood .documents-list {
+  list-style: none;
+  padding-left: 0;
+}
+.cookaddfood .documents-list li:before {
+  content: "•";
+  /* display: inline-block;
+  width: 1em;
+  margin-left: -1em; */
+  margin-right: 10px;
+  color: #999999;
+}

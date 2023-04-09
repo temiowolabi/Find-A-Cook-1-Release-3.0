@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Footer from "./components/Footer/Footer";
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
+import Topbar from "./components/Topbar";
+import Sidebar from "./components/Sidebar";
 
 async function postImage({documents, description}) {
   const formData = new FormData();
@@ -41,20 +43,13 @@ const CompleteForm = () => {
     };
   return (
     <>
-      <nav className="thing1">
+      {/* <nav className="thing1">
         <div className="formLogo">
           <a href="/">
             <img src="./images/logo-new-edit-01.png" />
           </a>
         </div>
       </nav>
-      {/* <nav className="thing2">
-        <div className="personal-info-text">
-          <h1>Personal Information</h1>
-        </div>
-      </nav> */}
-
-
 
       <div className="personal-form-body">
         <main className="personal-form-container">
@@ -70,9 +65,39 @@ const CompleteForm = () => {
       </form>
         </section>
         </main>
-      </div>
 
-      <Footer />
+      </div> */}
+
+      
+
+<Topbar />
+            <Sidebar />
+
+            <div className="cookaddfood">
+
+
+          <h2>Documentation</h2>
+          <form encType="multipart/form-data" method="POST" action="/cook/documents" onSubmit={submit} className="personal-form">
+        <label for="other">Add the following documents: </label>
+        <div>
+
+  <ul className="documents-list">
+    <li>HAACP</li>
+    <li>Garda Vetting</li>
+    <li>Insurance</li>
+  </ul>
+</div> 
+
+        <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Other" accept=".pdf" /> <br />
+
+
+        <a href="/submit"><button type="submit">Submit</button></a>
+
+      </form>
+
+      </div> 
+
+      {/* <Footer /> */}
     </>
   );
 };

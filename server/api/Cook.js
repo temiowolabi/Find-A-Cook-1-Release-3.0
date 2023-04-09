@@ -842,15 +842,14 @@ router.post('/searchcooks', async (req, res) => {
 });
 
 
-router.get('/:id', async (req, res) => {
+router.get('/menuitems', async (req, res) => {
   try {
-    const cook = await Cook.findById(req.params.id).populate('dishes.specialty', 'name');
-    if (!cook) {
-      return res.status(404).json({ message: 'Cook not found' });
-    }
-    res.status(200).json(cook);
+    const cookId = req.session.cook._id; // Retrieve the cook ID from the session
+    const menuItems = await MenuItemSchema.find({ cook: cookId }).populate('category'); // Find all menu items for the logged-in cook and populate the 'category' field
+    res.json({ status: 'SUCCESS', menuItems: menuItems });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error retrieving menu items', error);
+    res.json({ status: 'ERROR', message: 'Error retrieving menu items' });
   }
 });
 

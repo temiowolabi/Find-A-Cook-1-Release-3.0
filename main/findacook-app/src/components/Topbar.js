@@ -30,17 +30,7 @@ const Topbar = () => {
           <span className="logo">Hi {firstname}!</span>
         </div>
         <div className="topRight">
-          <div className="topbarIconContainer">
-            {/* <NotificationsNone /> */}
-            <span className="topIconBadge">2</span>
-          </div>
-          <div className="topbarIconContainer">
-            <FaLanguage />
-            <span className="topIconBadge">2</span>
-          </div>
-          <div className="topbarIconContainer">
-            {/* <Settings /> */}
-          </div>
+
           <img src={profile} alt="" className="topAvatar" />
         </div>
       </div>

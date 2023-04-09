@@ -132,7 +132,7 @@ const CookDashboard = () => {
 
 
 
-     <div className="personal-form-body">
+     {/* <div className="personal-form-body">
         <main className="personal-form-container">
         <section className="personal-form-section">
           <h2>Personal Information</h2>
@@ -146,7 +146,7 @@ const CookDashboard = () => {
       </form>
         </section>
         </main>
-      </div>
+      </div> */}
 
 </>
     );
