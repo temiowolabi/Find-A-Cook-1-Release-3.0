@@ -82,6 +82,9 @@ function RegistrationPage() {
                                 <input type="password" name="user_password" class="input-text" placeholder="Password" value={user.user_password} onChange={handleInputChange} />
                             </div>
                             <div class="form-group form-fg">
+                                <input type="password" name="user_password" class="input-text" placeholder="Confirm Password" value={user.user_password} onChange={handleInputChange} />
+                            </div>
+                            <div class="form-group form-fg">
                                 <input type="date" name="user_birthday" class="input-text" placeholder="Birth Date" value={user.user_birthday} onChange={handleInputChange} />
                             </div>
                             <div class="form-group mt-2">

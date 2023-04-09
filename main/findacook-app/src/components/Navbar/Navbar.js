@@ -48,7 +48,7 @@ function Navbar() {
             <a href='/'>
             <img src="../images/logo-new-edit-01.png" className='navLogo'/>
             </a>
-            <ul class="nav-links">
+            <ul class="login-nav-links">
       <li><a href="#">Discover Cooks</a></li>
       <li><a href="#">My Bookings</a></li>
       <li><a href="#"><FaShoppingCart />{' '} ({cart.length})</a></li>

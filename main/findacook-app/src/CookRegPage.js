@@ -87,14 +87,6 @@ function CookRegPage() {
                         </a>
                     </div>
                     <h3>New Here? Join Us!</h3>
-                    {/* <ul className="social">
-                        <li><a href="#" className="facebook"><FaFacebook />{' '}<span>Facebook</span></a></li>
-                        <li><a href="#" className="twitter"><BsTwitter />{' '}<span>Twitter</span></a></li>
-                        <li><a href="#" className="google"><FaGoogle />{' '}<span>Google</span></a></li>
-                    </ul>
-                    <div className="or-login clearfix">
-                        <span>Or</span>
-                    </div> */}
                     <div className="form-container">
                         <form>
                             <div className="form-group form-fg">
@@ -107,10 +99,10 @@ function CookRegPage() {
                                 <input type="text" name="surname" className="input-text" placeholder="Legal Surname" />
                             </div>
                             <div className="form-group form-fg">
-                                <input type="number" name="number" className="input-text" placeholder="Phone Number" />
+                            <input type="email" name="email" className="input-text" placeholder="Password" />
                             </div>
                             <div className="form-group form-fg">
-                                <input type="email" name="email" className="input-text" placeholder="Password" />
+                                <input type="email" name="email" className="input-text" placeholder="Confirm Password" />
                             </div>
                             <div className="form-group form-fg">
                                 <input type="date" name="date" className="input-text" placeholder="Birth Date" />

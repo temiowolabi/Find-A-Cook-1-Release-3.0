@@ -34,7 +34,7 @@
 	margin-right: 350px;
   }
 
-  .nav-links {
+  .login-nav-links {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -43,22 +43,22 @@
 	padding: 0;
   }
   
-  .nav-links li {
+  .login-nav-links li {
 	margin-left: 20px;
   }
   
-  .nav-links li:first-child {
+  .login-nav-links li:first-child {
 	margin-left: 0;
   }
   
-  .nav-links a {
+  .login-nav-links a {
 	font-size: 18px;
 	color: #333;
 	text-decoration: none;
 	transition: color 0.2s ease-in-out;
   }
 
-  .nav-links a:hover {
+  .login-nav-links a:hover {
 	color: #8CBE46;
   }
 
