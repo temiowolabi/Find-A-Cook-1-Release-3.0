@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useState } from 'react';
 import Footer from "./components/Footer/Footer";
 import { useSelector, useDispatch } from "react-redux";
+import axios from 'axios';
+
+async function postImage({documents, description}) {
+  const formData = new FormData();
+  for (let i = 0; i < documents.length; i++) {
+    formData.append('document', documents[i]);
+  }
+  formData.append('description', description);
+
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  };
+
+  const result = await axios.post('http://localhost:5001/cook/documents', formData, config);
+  return result.data;
+}
+
 
 const CompleteForm = () => {
     const { categories } = useSelector(state => state.categories);
+
+    const [file, setFile] = useState()
+    const [description, setDescription] = useState("")
+    const [documents, setDocuments] = useState([]);
+  
+    const submit = async (event) => {
+      event.preventDefault();
+      const result = await postImage({documents, description});
+      setDocuments([...result.documents, ...documents]);
+    };
+    
+  
+    const fileSelected = (event) => {
+      const files = event.target.files;
+      setDocuments(files);
+    };
   return (
     <>
       <nav className="thing1">
@@ -25,35 +60,11 @@ const CompleteForm = () => {
         <main className="personal-form-container">
         <section className="personal-form-section">
           <h2>Personal Information</h2>
-        <form action="" className="personal-form">
-        <label>Hazard Analysis and Critical Control Points (HAACP) Certification</label>
-        <input type="file" placeholder="Hazard Analysis and Critical Control Points (HAACP) Certification" /> <br />
-        <label>Munual Handling Certification</label>
-        <input type="file" placeholder="Munual Handling Certification" /> 
-        <label for="insurance">Insurance</label>
-        <input type="file" id="insurance" name="insurance" placeholder="Insurance" /> <br />
-        <p>Don't have insurance? <a href="https://cookinsurance.cc/">Get insured today!</a></p>
+          <form encType="multipart/form-data" method="POST" action="/cook/documents" onSubmit={submit} className="personal-form">
         <label for="other">Other</label>
-        <input type="file" id="other" name="other" placeholder="Other" /> <br />
+        <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Other" accept=".pdf" /> <br />
 
 
-        {/* TODO: GARDA VETTING + DISTANCE OPTION */}
-
-        <label>What is your speciality?</label>
-        <select 
-                      className="form-control"
-                      name='category'>
-                        <option>Choose One...</option>
-                        {categories &&
-                          categories.map((c) => (
-                            <option key={c._id} value={c._id}>
-                              {c.category_name}
-                            </option>
-                          ))}
-                      </select>
-
-
-        <textarea name="" id="" cols="30" rows="10" placeholder="Why do you want to become a cook?"></textarea>
         <a href="/submit"><button className="applicationBtn">Apply</button></a>
 
       </form>

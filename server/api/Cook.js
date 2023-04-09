@@ -8,6 +8,72 @@ const {v4:uuid} = require("uuid");
 const MenuCategorySchema = require('./../models/MenuCategory');
 const MenuItemSchema = require('./../models/Menu')
 const multer = require('multer');
+const aws = require("aws-sdk");
+const multerS3 = require('multer-s3');
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
+const { uploadFile, getFileStream, uploadToS3 } = require('./s3')
+const upload2 = multer({ dest: '/uploads/' })
+const storageTest = multer.memoryStorage();
+const documentUpload = multer({ storage: storageTest });
+
+// const upload = multer({ storage: storage });
+
+router.get('/images/:key', (req, res) => {
+  console.log(req.params)
+  const key = req.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(res)
+})
+
+router.post('/images', upload2.single('image'), async (req, res) => {
+  const file = req.file;
+  console.log(file); // add this line to see if file is being received
+  // apply filter
+  // resize 
+
+  const result = await uploadFile(file, 'images')
+  await unlinkFile(file.path)
+  console.log(result)
+  const description = req.body.description
+  res.send({imagePath: `/images/${result.Key}`})
+});
+
+
+// router.post('/documents', documentUpload.array('document'), async (req, res) => {
+//   try {
+//     const files = req.files;
+//     console.log('Console: ',req.files);
+//     const result = [];
+
+//     const cookId = req.session.cook_id; // get the cookId from the session
+//     console.log("COOK ID YALL",cookId);
+
+//     for (const file of files) {
+//       console.log("req.files:", req.files);
+//       console.log("req.files.document:", req.files.document);
+      
+//       const filename = `${cookId}_${file.originalname}`; // include cookId in the filename
+//       const uploadResult = await uploadToS3(file, 'document', filename); // pass the filename to the uploadToS3 function
+//       result.push(uploadResult);
+//     }
+
+//     res.json({ message: 'Documents uploaded successfully', data: result });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'Failed to upload documents' });
+//   }
+// });
+
+
+
+// const s3 = new aws.S3({
+//   accessKeyId: process.env.S3_ACCESS_KEY,
+//   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+//   region: process.env.S3_BUCKET_REGION,
+// })
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -17,9 +83,22 @@ const storage = multer.diskStorage({
       cb(null, Date.now() + '-' + file.originalname);
     },
   });
-  
-  const upload = multer({ storage: storage });
 
+  // const documentUpload = (bucketName) => multer({
+  //   storage: multerS3({
+  //     s3,
+  //     bucket: bucketName,
+  //     metadata: function (req, file, cb) {
+  //       cb(null, { fieldName: file.fieldName });
+  //     },
+  //     key: function (req, file, cb) {
+  //       cb(null, Date.now().toString())
+  //     }
+  //   })
+  // })
+  
+
+  const upload = multer({ storage: storage });
 
 require('dotenv').config();
 
@@ -35,8 +114,12 @@ let transporter = nodemailer.createTransport({
     },
 });
 
+
+
 const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+
 
 router.post('/cooksignup', (req, res) => {
     const { cook_email, cook_first_name, cook_last_name, cook_password, cook_birthday } = req.body;
@@ -319,11 +402,6 @@ router.put("/editprofile", (req, res) => {
       });
     }
   });
-  
-  
-
-
-
 
   
   router.post('/verify_cook', async (req, res) => {
@@ -347,6 +425,134 @@ router.put("/editprofile", (req, res) => {
     }
   });
 
+  
+  router.post('/documents', documentUpload.array('document'), async (req, res) => {
+    try {
+      const files = req.files;
+      console.log('Console: ',req.files);
+      const result = [];
+      const cook = req.session.cook;
+      const fromEmail = cook.cook_email;
+      const from = `Your Cooks <${fromEmail}>`;
+  
+      for (const file of files) {
+        console.log("req.files:", req.files);
+        console.log("req.files.document:", req.files.document);
+        
+        const filename = `${cook._id}_${file.originalname}`; // include cookId in the filename
+        const uploadResult = await uploadToS3(file, 'document', filename); // pass the filename to the uploadToS3 function
+        result.push(uploadResult);
+
+
+        const mailOptions = {
+          from,
+          to: 'temiowolabi8@gmail.com',
+          subject: 'New Document Uploaded',
+          html: `Cook ${cook.cook_first_name} ${cook.cook_last_name} (ID: ${cook._id}) has uploaded a new document: ${filename}`,
+          attachments: req.files.map(file => ({
+            filename: file.originalname,
+            content: file.buffer
+          }))
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+      
+      }
+  
+      res.json({ message: 'Documents uploaded successfully', data: result });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to upload documents' });
+    }
+  });
+
+
+  // router.put('/:id/applicationstatus', async (req, res) => {
+  //   const { id } = req.params;
+  //   const { application_status } = req.body;
+  //   try {
+  //     const cook = await Cook.findById(id);
+  //     if (!cook) {
+  //       return res.status(404).json({ error: 'Cook not found' });
+  //     }
+  //     if (!application_status) {
+  //       return res.status(400).json({ error: 'Invalid application status' });
+  //     }
+  //     cook.application_status = application_status;
+  //     await cook.save();
+  //     res.json({ message: 'Application status updated successfully', data: cook });
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).json({ error: 'Failed to update application status' });
+  //   }
+  // });
+  
+
+  router.put('/:id/applicationstatus', async (req, res) => {
+    const { id } = req.params;
+    const { application_status, reason_for_decline } = req.body;
+    try {
+      const cook = await Cook.findById(id);
+      if (!cook) {
+        return res.status(404).json({ error: 'Cook not found' });
+      }
+      if (!application_status) {
+        return res.status(400).json({ error: 'Invalid application status' });
+      }
+      console.log(cook.cook_email)
+      cook.application_status = application_status;
+      console.log(application_status, reason_for_decline);
+      if (application_status === 'declined' && reason_for_decline) {
+        const mailOptions = {
+          from: process.env.AUTH_EMAIL,
+          to: cook.cook_email,
+          subject: 'Your application has been declined',
+          text: `Dear ${cook.cook_first_name},\n\nWe regret to inform you that your application has been declined due to the following reason: ${reason_for_decline}.\n\nThank you for your interest in Find-A-Cook.\n\nBest regards,\nThe Find-A-Cook team`
+        };
+        console.log('Before transporter.sendMail');
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Failed to send email' });
+          } else {
+            console.log(`Email sent: ${info.response}`);
+            console.log("YO YO YO",info);
+            res.json({ message: 'Application status updated successfully', data: cook });
+          }
+        });
+        console.log('After transporter.sendMail');
+      }
+
+      if (application_status === 'approved') {
+        const mailOptions = {
+          from: process.env.AUTH_EMAIL,
+          to: cook.cook_email,
+          subject: "Your application has been approved",
+          html: `<p>Congratulations! Your application has been approved. Please visit <a href='http://localhost:3000/subscription'>this page</a> to complete your registration.</p>`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error("Error sending email:", error);
+          } else {
+            console.log("Email sent successfully:", info.response);
+          }
+        });
+      }
+      await cook.save();
+      res.json({ message: 'Application status updated successfully', data: cook });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to update application status' });
+    }
+  });
+  
   
   
 
