@@ -841,6 +841,20 @@ router.post('/searchcooks', async (req, res) => {
   }
 });
 
+
+router.get('/:id', async (req, res) => {
+  try {
+    const cook = await Cook.findById(req.params.id).populate('dishes.specialty', 'name');
+    if (!cook) {
+      return res.status(404).json({ message: 'Cook not found' });
+    }
+    res.status(200).json(cook);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 module.exports = router;
 // router.post('cooklogout', (req, res) => {
 

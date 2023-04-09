@@ -46,7 +46,7 @@ function Navbar() {
 <nav className='nav-bar'>
             <div className='nav-container'>
             <a href='/'>
-            <img src="../images/logo-new-edit-01.png" className='navLogo'/>
+            <img src="/images/logo-new-edit-01.png" className='navLogo'/>
             </a>
             <ul class="login-nav-links">
       <li><a href="#">Discover Cooks</a></li>

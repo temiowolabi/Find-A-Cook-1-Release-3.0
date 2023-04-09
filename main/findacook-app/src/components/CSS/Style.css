@@ -1590,3 +1590,115 @@ label {
   .search-container .clearSearch:hover {
 	background-color: #ddd;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .cook-page-container {
+	margin-top: 50px;
+  }
+  
+  .cook-page-card {
+	height: 450px;
+  }
+  
+  .cook-card-img-top {
+	height: 200px;
+	object-fit: cover;
+  }
+  
+  .cook-btn-outline-secondary {
+	color: #007bff;
+	border-color: #007bff;
+  }
+  
+  .cook-btn-outline-secondary:hover {
+	background-color: #007bff;
+	color: #fff;
+  }
+  
+
+
+
+  .cookaddfood {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 50px;
+  }
+
+  
+  .cookaddfood h2 {
+	margin-bottom: 20px;
+	font-size: 2rem;
+  }
+
+  .cookaddfood form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+	max-width: 500px;
+	padding: 20px;
+	background-color: #f7f7f7;
+	border-radius: 5px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  
+  .cookaddfood div {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+	width: 100%;
+  }
+  
+  .cookaddfood label {
+	font-weight: bold;
+	margin-bottom: 9px;
+	position: relative;
+  }
+  
+  .cookaddfood input[type="text"],
+  .cookaddfood input[type="number"],
+  .cookaddfood select {
+	padding: 10px;
+	font-size: 1rem;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .cookaddfood select {
+	cursor: pointer;
+  }
+  
+  .cookaddfood input[type="file"] {
+	margin-top: 10px;
+  }
+  
+  .cookaddfood button[type="submit"] {
+	margin-top: 20px;
+	padding: 10px;
+	font-size: 1rem;
+	font-weight: bold;
+	color: #fff;
+	background-color: #8CBE46;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+  }
+  
+  .cookaddfood button[type="submit"]:hover {
+	background-color: #a1e246;
+  }
