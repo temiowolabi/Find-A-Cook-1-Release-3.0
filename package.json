@@ -3,8 +3,6 @@
     "@chec/commerce.js": "^2.8.0",
     "@emotion/styled": "^11.10.6",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.11",
     "@reduxjs/toolkit": "^1.9.3",
     "@stripe/react-stripe-js": "^1.16.5",
     "autosuggest-highlight": "^3.3.4",
