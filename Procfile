@@ -1,1 +1,2 @@
-web: cd server && npm install &&  nodemon server.js
+server: cd server && npm install && nodemon index.js
+web: cd main/findacook-app && npm install && npm start
