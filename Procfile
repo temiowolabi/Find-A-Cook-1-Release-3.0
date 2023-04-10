@@ -1,1 +1,1 @@
-web: cd Server && npm install &&  nodemon server.js
+web: cd server && npm install &&  nodemon server.js
