@@ -9,7 +9,7 @@
     "@stripe/react-stripe-js": "^1.16.5",
     "autosuggest-highlight": "^3.3.4",
     "express": "^4.18.2",
-    "heroku": "^8.0.3",
+    "heroku": "^7.7.8",
     "mongoose": "^6.9.1",
     "react-bootstrap": "^2.7.2",
     "react-icons": "^4.7.1",
@@ -28,6 +28,6 @@
     "heroku-postbuild": "cd main/findacook-app && npm install && npm run build"
   },
   "devDependencies": {
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^2.1.3"
   }
 }
