@@ -26,6 +26,7 @@
     "heroku-postbuild": "cd main/findacook-app && npm install && npm run build"
   },
   "devDependencies": {
+    "nodemon": "^2.0.22",
     "react-scripts": "^2.1.3"
   }
 }
