@@ -5,9 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
 import CookLoginPage from './CookLoginPage';
-import UploadDocuments from './UploadDocuments';
 import RegistrationPage from './RegistrationPage';
-import GuestPage from './GuestPage';
 import TestPage from './TestPage';
 import CartPage2 from './CartPage2';
 import OrderInfoPage from './OrderInfoPage';
@@ -23,10 +21,9 @@ import EditProduct from './components/Admin/EditProduct';
 import Home from './Home';
 import VerifyPage from './VerifyPage';
 import CookDashboard from './CookDashboard';
-import RegisinfoPage from './RegisInfoPage';
 import TermsPage from './TermsPage';
 import CookProfile from './CookProfile';
-import ViewCooks from './ViewCooks';
+
 
 
 import VerificationPage from './VerificationPage';
@@ -67,22 +64,18 @@ function App() {
       <Route exact path="/" element={<LandingPage/>} />
       <Route path="/login" element={<LoginPage/>} />
       <Route path="/register" element={<RegistrationPage/>} />
-      <Route path="/guest" element={<GuestPage/>} />
       <Route path="/test" element={<TestPage/>} />
       <Route path="/cart" element={<CartPage2/>} />
       <Route path="/order" element={<OrderInfoPage/>} />
       <Route path="/edit/product/:productId" element={<EditProduct />} />
       <Route path="/product/:productId" element={<ProductPage/>} />
       <Route path="/admin" element={<SampleAdminDashboard/>} />
-      <Route path="/documentupload" element={<UploadDocuments/>} />
       <Route path="/shipping" element={<Shipping/>} />
       <Route path="/home" element={<Home />} />
       <Route path="/verify" element={<VerifyPage />} />
       <Route path="/cookdashboard" element={<CookDashboard />} />
-      <Route path="/registerprofile" element={<RegisinfoPage/>} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/profile" element={<CookProfile />} />
-      <Route path="/viewcooks" element={<ViewCooks />} />
       <Route path="/verificationpage" element={<VerificationPage/>} />
       <Route path="/cooklogin" element={<CookLoginPage />} />
       <Route path="/cookregistration" element={<CookRegPage />} />
