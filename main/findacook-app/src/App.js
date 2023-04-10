@@ -23,7 +23,6 @@ import EditProduct from './components/Admin/EditProduct';
 import Home from './Home';
 import VerifyPage from './VerifyPage';
 import CookDashboard from './CookDashboard';
-import RegisinfoPage from './RegisInfoPage';
 import TermsPage from './TermsPage';
 import CookProfile from './CookProfile';
 import ViewCooks from './ViewCooks';
@@ -79,7 +78,6 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/verify" element={<VerifyPage />} />
       <Route path="/cookdashboard" element={<CookDashboard />} />
-      <Route path="/registerprofile" element={<RegisinfoPage/>} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/profile" element={<CookProfile />} />
       <Route path="/viewcooks" element={<ViewCooks />} />
