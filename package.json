@@ -22,6 +22,7 @@
   "scripts": {
     "main": "cd main/findacook-app && npm start",
     "server": "cd server && nodemon index.js",
+    "start": "nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "cd main/findacook-app && npm install && npm run build"
   },
