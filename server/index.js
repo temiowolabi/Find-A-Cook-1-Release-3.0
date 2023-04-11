@@ -16,7 +16,7 @@ const path = require('path')
 app.use(express.static(path.join(__dirname, '../../main/findacook-app/build')))
 
 // Anything that doesn't match the above, send back index.html
-res.sendFile(path.join(__dirname + '../../main/findacook-app/build/index.html'))
+res.sendFile(path.join(__dirname, '../../main/findacook-app/build/index.html'))
 
 app.use(cors());
 app.use(express.json());
