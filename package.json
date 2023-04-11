@@ -24,10 +24,10 @@
     "web-vitals": "^3.1.1"
   },
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node server/server.js",
     "build": "cd main/findacook-app && npm run build",
     "install": "cd main/findacook-app && npm install",
-    "server": "nodemon server/index.js",
+    "server": "nodemon server/server.js",
     "client": "cd main/findacook-app && npm start",
     "heroku-postbuild": "cd server && npm install && npm run build && cd ../main/findacook-app && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\""
