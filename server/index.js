@@ -13,7 +13,7 @@ const filterRoutes = require('./routes/filter');
 const mongoose = require('mongoose');
 const path = require('path')
 // Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, '../../main/findacook-app/build')))
+app.use('/static', express.static(path.join(__dirname, '../../main/findacook-app/build')))
 
 // // Anything that doesn't match the above, send back index.html
 // res.sendFile(path.join(__dirname, '../../main/findacook-app/build/index.html'))
