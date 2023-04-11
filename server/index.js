@@ -18,6 +18,10 @@ app.use(express.static(path.join(__dirname, '../../main/findacook-app/build')))
 // // Anything that doesn't match the above, send back index.html
 // res.sendFile(path.join(__dirname, '../../main/findacook-app/build/index.html'))
 
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname,  '../../main/findacook-app/build/index.html'));
+  });
+
 app.use(cors());
 app.use(express.json());
 app.use('/api/category', categoryRoutes);
