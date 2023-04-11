@@ -29,7 +29,7 @@
     "install": "cd main/findacook-app && npm install",
     "server": "nodemon server/index.js",
     "client": "cd main/findacook-app && npm start",
-    "heroku-postbuild": "cd server && npm install && npm run build",
+    "heroku-postbuild": "cd server && npm install && npm run build && cd ../main/findacook-app && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   }
   
