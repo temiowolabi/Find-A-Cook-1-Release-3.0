@@ -25,11 +25,10 @@
   },
   "scripts": {
     "start": "node server/server.js",
-    "build": "cd main/findacook-app && npm run build",
-    "install": "cd main/findacook-app && npm install",
+    "build": "cd findacook-app && npm run build",
+    "install": "cd findacook-app && npm install",
     "server": "nodemon server/server.js",
-    "client": "cd main/findacook-app && npm start",
-    "heroku-postbuild": "cd server && npm install && npm run build && cd ../main/findacook-app && npm install && npm run build",
+    "client": "cd findacook-app && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   }
   
