@@ -4,8 +4,8 @@ import "../CSS/Style.css"
 
 function AddMenuItem() {
   const [form, setForm] = useState({
-    item_name: '',
-    product_description: '',
+    dish: '',
+    dish_description: '',
     price: '',
     category: '',
     imageurls: null,
@@ -72,8 +72,8 @@ function AddMenuItem() {
       await axios.post('http://localhost:5001/cook/addmenuitem', formData, config);
       alert('Menu item added successfully');
       setForm({
-        item_name: '',
-        product_description: '',
+        dish: '',
+        dish_description: '',
         price: '',
         category: '',
         imageurls: [],
@@ -92,19 +92,19 @@ function AddMenuItem() {
           <input
             type="text"
             placeholder='Name'
-            name="item_name"
-            value={form.item_name}
+            name="dish"
+            value={form.dish}
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label>Product Description:</label>
+          <label>Dish Description:</label>
           <input
             type="text"
             placeholder='Description'
-            name="product_description"
-            value={form.product_description}
+            name="dish_description"
+            value={form.dish_description}
             onChange={handleChange}
             required
           />

@@ -14,7 +14,11 @@ const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 const { uploadFile, getFileStream, uploadToS3 } = require('./s3')
+
+//const upload2 = multer({ dest: 'uploads/' })
+
 const upload2 = multer({ dest: '/tmp' })
+
 const storageTest = multer.memoryStorage();
 const documentUpload = multer({ storage: storageTest });
 
@@ -28,18 +32,18 @@ router.get('/images/:key', (req, res) => {
   readStream.pipe(res)
 })
 
-router.post('/images', upload2.single('image'), async (req, res) => {
-  const file = req.file;
-  console.log(file); // add this line to see if file is being received
-  // apply filter
-  // resize 
+// router.post('/images', upload2.single('image'), async (req, res) => {
+//   const file = req.file;
+//   console.log(file); // add this line to see if file is being received
+//   // apply filter
+//   // resize 
 
-  const result = await uploadFile(file, 'images')
-  await unlinkFile(file.path)
-  console.log(result)
-  const description = req.body.description
-  res.send({imagePath: `/images/${result.Key}`})
-});
+//   const result = await uploadFile(file, 'images')
+//   await unlinkFile(file.path)
+//   console.log(result)
+//   const description = req.body.description
+//   res.send({imagePath: `/images/${result.Key}`})
+// });
 
 
 // router.post('/documents', documentUpload.array('document'), async (req, res) => {
@@ -295,10 +299,89 @@ router.get("/allcooks", async (req, res) => {
     }
   });
 
+  // router.post('/images', upload2.single('image'), async (req, res) => {
+  //   const file = req.file;
+  //   console.log(file); // add this line to see if file is being received
+  //   // apply filter
+  //   // resize 
+  
+  //   const result = await uploadFile(file, 'images')
+  //   await unlinkFile(file.path)
+  //   console.log(result)
+  //   const description = req.body.description
+  //   res.send({imagePath: `/images/${result.Key}`})
+  // });
+  
 
-  router.post('/addmenuitem', upload.single('imageurls'), async (req, res) => {
-    console.log(req.files);
-    console.log(req.body);
+  // router.post('/addmenuitem', upload2.single('imageurls'), async (req, res) => {
+  //   const cook = req.session.cook;
+  
+  //   if (!cook) {
+  //     return res.json({
+  //       status: 'FAILED',
+  //       message: 'Not authorized to add menu items',
+  //     });
+  //   }
+  
+  //   const { dish, dish_description, price, category } = req.body;
+  //   // const imageurls = req.file ? req.file.path : null;
+  //   const imageurls = req.file;
+  //   console.log(imageurls); // add this line to see if file is being received
+  
+  //   const result = await uploadFile(imageurls, 'images')
+  //   await unlinkFile(imageurls.path)
+  //   console.log(result)
+  //   const description = req.body.description
+  //   res.send({imagePath: `/images/${result.Key}`})
+  //   try {
+  //     // Create a new product in Stripe
+  //     const product = await stripe.products.create({
+  //       name: dish,
+  //       type: 'good',
+  //     });
+  
+  //     // Create a new price for the product in Stripe
+  //     const stripePrice = await stripe.prices.create({
+  //       product: product.id,
+  //       unit_amount: price * 100, // Stripe requires the price in cents
+  //       currency: 'usd',
+  //     });
+  
+  //     const newDish = {
+  //       dish: dish,
+  //       dish_description: dish_description,
+  //       price: price,
+  //       category: category,
+  //       imageurls: imageurls,
+  //       stripe_product_id: product.id, // Save the product ID in your database
+  //       stripe_price_id: stripePrice.id, // Save the price ID in your database
+  //     };
+  
+  //     const updatedCook = await Cook.findByIdAndUpdate(
+  //       cook._id,
+  //       { $push: { dishes: newDish } },
+  //       { new: true }
+  //     );
+  
+  //     res.json({
+  //       status: 'SUCCESS',
+  //       message: 'Menu item added successfully',
+  //       updatedCook: updatedCook,
+  //     });
+  //   } catch (err) {
+  //     res.json({
+  //       status: 'FAILED',
+  //       message: 'Error adding menu item',
+  //       error: err,
+  //     });
+  //   }
+  // });
+  
+  
+
+
+
+  router.post('/addmenuitem', upload2.single('imageurls'), async (req, res) => {
     const cook = req.session.cook;
   
     if (!cook) {
@@ -308,23 +391,50 @@ router.get("/allcooks", async (req, res) => {
       });
     }
   
-    const { item_name, product_description, price, category } = req.body;
-    const imageurls = req.file ? req.file.path : null;
+    const { dish, dish_description, price, category } = req.body;
+    // const imageurls = req.file ? req.file.path : null;
+    const imageurls = req.file;
+    console.log(imageurls); // add this line to see if file is being received
   
+    const result = await uploadFile(imageurls, 'images')
+    await unlinkFile(imageurls.path)
+    console.log(result)
+    const description = req.body.description
+    res.send({imagePath: `/images/${result.Key}`})
     try {
-      const menuItem = new MenuItemSchema({
-        cook_id: cook._id,
-        item_name: item_name,
-        product_description: product_description,
-        category: category,
-        imageurls: imageurls,
-        price: price,
+      // Create a new product in Stripe
+      const product = await stripe.products.create({
+        name: dish,
+        type: 'good',
       });
   
-      await menuItem.save();
+      // Create a new price for the product in Stripe
+      const stripePrice = await stripe.prices.create({
+        product: product.id,
+        unit_amount: price * 100, // Stripe requires the price in cents
+        currency: 'eur',
+      });
+  
+      const newDish = {
+        dish: dish,
+        dish_description: dish_description,
+        price: price,
+        category: category,
+        imageurls: imageurls,
+        stripe_product_id: product.id, // Save the product ID in your database
+        stripe_price_id: stripePrice.id, // Save the price ID in your database
+      };
+  
+      const updatedCook = await Cook.findByIdAndUpdate(
+        cook._id,
+        { $push: { dishes: newDish } },
+        { new: true }
+      );
+  
       res.json({
         status: 'SUCCESS',
         message: 'Menu item added successfully',
+        updatedCook: updatedCook,
       });
     } catch (err) {
       res.json({
@@ -334,6 +444,103 @@ router.get("/allcooks", async (req, res) => {
       });
     }
   });
+  
+
+
+
+  // router.post('/addmenuitem', upload.single('imageurls'), async (req, res) => {
+  //   console.log(req.files);
+  //   console.log(req.body);
+  //   const cook = req.session.cook;
+  
+  //   if (!cook) {
+  //     return res.json({
+  //       status: 'FAILED',
+  //       message: 'Not authorized to add menu items',
+  //     });
+  //   }
+  
+  //   const { item_name, product_description, price, category } = req.body;
+  //   const imageurls = req.file ? req.file.path : null;
+  
+  //   try {
+  //     // Create a new product in Stripe
+  //     const product = await stripe.products.create({
+  //       name: item_name,
+  //       type: 'good',
+  //     });
+  
+  //     // Create a new price for the product in Stripe
+  //     const stripePrice = await stripe.prices.create({
+  //       product: product.id,
+  //       unit_amount: price * 100, // Stripe requires the price in cents
+  //       currency: 'usd',
+  //     });
+  
+  //     const menuItem = new MenuItemSchema({
+  //       cook_id: cook._id,
+  //       item_name: item_name,
+  //       product_description: product_description,
+  //       category: category,
+  //       imageurls: imageurls,
+  //       price: price,
+  //       stripe_product_id: product.id, // Save the product ID in your database
+  //       stripe_price_id: stripePrice.id, // Save the price ID in your database
+  //     });
+  
+  //     await menuItem.save();
+  //     res.json({
+  //       status: 'SUCCESS',
+  //       message: 'Menu item added successfully',
+  //     });
+  //   } catch (err) {
+  //     res.json({
+  //       status: 'FAILED',
+  //       message: 'Error adding menu item',
+  //       error: err,
+  //     });
+  //   }
+  // });
+
+
+  // router.post('/addmenuitem', upload.single('imageurls'), async (req, res) => {
+  //   console.log(req.files);
+  //   console.log(req.body);
+  //   const cook = req.session.cook;
+  
+  //   if (!cook) {
+  //     return res.json({
+  //       status: 'FAILED',
+  //       message: 'Not authorized to add menu items',
+  //     });
+  //   }
+  
+  //   const { item_name, product_description, price, category } = req.body;
+  //   const imageurls = req.file ? req.file.path : null;
+  
+  //   try {
+  //     const menuItem = new MenuItemSchema({
+  //       cook_id: cook._id,
+  //       item_name: item_name,
+  //       product_description: product_description,
+  //       category: category,
+  //       imageurls: imageurls,
+  //       price: price,
+  //     });
+  
+  //     await menuItem.save();
+  //     res.json({
+  //       status: 'SUCCESS',
+  //       message: 'Menu item added successfully',
+  //     });
+  //   } catch (err) {
+  //     res.json({
+  //       status: 'FAILED',
+  //       message: 'Error adding menu item',
+  //       error: err,
+  //     });
+  //   }
+  // });
   
 
 router.put("/editprofile", (req, res) => {
@@ -554,7 +761,89 @@ router.put("/editprofile", (req, res) => {
   });
   
   
+  router.post('/:cookId/dish', async (req, res) => {
+    try {
+      const dish = new MenuItemSchema(req.body);
+      dish.cook_id = req.params.cookId;
+      await dish.save();
   
+      // Find the cook and add the dish to their dishes array
+      const cook = await Cook.findByIdAndUpdate(
+        req.params.cookId,
+        { $push: { dishes: dish } },
+        { new: true }
+      );
+  
+      res.status(201).json(dish);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+
+  router.get('/:cookId', async (req, res) => {
+    try {
+      // Find the cook by ID and populate their dishes
+      const cook = await Cook.findById(req.params.cookId).populate('dishes');
+      // Return the cook's dishes
+      res.json(cook.dishes);
+    } catch (error) {
+      // Return an error message if there is an error
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+router.post('/searchcooks', async (req, res) => {
+  // Get the type (cuisine, dish, or both) and search query from the request body
+  const { type, query } = req.body;
+
+  try {
+    let cooks;
+
+    switch (type) {
+      case 'cuisine':
+        // Find the menu category that matches the cuisine query
+        const cuisine = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${query.toString()}$`, 'i') } });
+        if (!cuisine) {
+          // Return an empty response if the cuisine is not found
+          return res.json({ cooks: [] });
+        }
+        // Find all cooks with the matching cuisine
+        cooks = await Cook.find({ specialties: cuisine._id });
+        console.log('Found cooks by cuisine:', cooks); // log the found cooks
+        break;
+      case 'dish':
+        // Find all cooks with a dish that matches the dish query
+        cooks = await Cook.find({ 'dishes.dish': { $regex: new RegExp(`${query.toString()}`, 'i') } });
+        console.log('Found cooks by dish:', cooks); // log the found cooks
+        break;
+      case 'both':
+        // Find all cooks with a dish or cuisine that matches the search query
+        cooks = await Cook.find({
+          $or: [
+            { 'specialties': { $in: await MenuCategorySchema.find({category_name: {$regex: new RegExp(`${query}`, 'i')}}).select('_id') } },
+            { 'dishes.dish': { $regex: new RegExp(`${query}`, 'i') } }
+          ]
+        });
+        console.log('Found cooks by both:', cooks); // log the found cooks
+        break;
+    }
+
+    // If no cooks were found, return an empty array
+    if (!cooks.length) {
+      return res.json({ cooks: [] });
+    }
+
+    // Return the found cooks
+    res.json({ cooks });
+  } catch (err) {
+    console.log(err, 'filter Controller error');
+    // Return an error message if there is an error
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
 
 module.exports = router;
 // router.post('cooklogout', (req, res) => {
