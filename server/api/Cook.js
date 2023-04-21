@@ -14,7 +14,11 @@ const fs = require('fs')
 const util = require('util')
 const unlinkFile = util.promisify(fs.unlink)
 const { uploadFile, getFileStream, uploadToS3 } = require('./s3')
-const upload2 = multer({ dest: 'uploads/' })
+
+//const upload2 = multer({ dest: 'uploads/' })
+
+const upload2 = multer({ dest: '/tmp' })
+
 const storageTest = multer.memoryStorage();
 const documentUpload = multer({ storage: storageTest });
 
