@@ -920,7 +920,7 @@ label #agreeLbl {
 
 .secondary-button {
   padding: 1rem 2.5rem;
-  background-color: #FCFF02;
+  background-color: #8CBE46;
   outline: none;
   border: none;
   border-radius: 5rem;
@@ -1107,14 +1107,14 @@ label #agreeLbl {
 }
 
 .login-fg .form-container .btn-fg {
-  background: #FCFF02;
+  background: #8CBE46;
   border: none;
   color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2)
 }
 
 .login-fg .form-container .btn-fg:hover {
-  background: #DBD924
+  background: #a1e246
 }
 
 .login-fg .logo a {

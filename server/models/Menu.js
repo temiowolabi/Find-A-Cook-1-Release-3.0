@@ -8,11 +8,12 @@ const menus = new Schema(
       ref: 'Cook',
       required: true,
     },
-    item_name: {
+    dish: {
       type: String,
       required: true,
+      index: true,
     },
-    product_description: {
+    dish_description: {
       type: String,
       required: true,
     },

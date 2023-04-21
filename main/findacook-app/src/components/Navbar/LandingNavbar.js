@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import '../CSS/Style.css'
 import { useRef } from "react";
 import { FaSearch, FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 // import { CartContext } from '../../CartContext';
 import { Modal } from "react-bootstrap";
 // import DemoCart from '../Demo/DemoCart';
@@ -12,7 +12,7 @@ const LandingNavbar  = () => {
 	// const cart = useContext(CartContext);
 
     const { cart } = useSelector(state => state.cart)
-
+    const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -41,19 +41,72 @@ const LandingNavbar  = () => {
     //     });
 	// }
 
+
+    const [showLoginModal, setShowLoginModal] = useState(false);
+
+    const handleLoginClick = () => {
+      setShowLoginModal(true);
+    };
+  
+    const handleModalClose = () => {
+      setShowLoginModal(false);
+    };
+  
+    const handleCookLoginClick = () => {
+        navigate('/cooklogin')
+      handleModalClose();
+    };
+  
+    const handleCustomerLoginClick = () => {
+        navigate('/login')
+      handleModalClose();
+    };
+
 	return (
 		<>
-		<header>
-			{/* <div className='navLogo'>
-            <img src="../images/logo-new-edit-01.png"/>
-            </div>  */}
-            {/* <h3>Find A Cook</h3> */}
+
+
+        <nav className='nav-bar'>
+            <div className='nav-container'>
+            <a href='/'>
+            <img src="../images/logo-new-edit-01.png" className='navLogo'/>
+            </a>
+            <ul class="login-nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">FAQ</a></li>
+      <li><a href="#">Contact Us</a></li>
+      <li><button className="navbar-login-btn" onClick={handleLoginClick}>Log In</button></li>
+    </ul>
+            </div>
+
+<Modal id='' show={showLoginModal} onHide={handleModalClose}>
+
+        <Modal.Body>
+        <div className="login-modal">
+        <div className="login-modal-content">
+        <h2>Log In</h2>
+        <p>Are you a cook or a customer?</p>
+            <button onClick={handleCookLoginClick}>Cook</button>
+            <button onClick={handleCustomerLoginClick}>Customer</button>
+            <button onClick={handleModalClose}>Cancel</button>
+            </div>
+            </div>
+        </Modal.Body>
+        <Modal.Footer>
+
+        </Modal.Footer>
+      </Modal>
+        </nav>
+
+		{/* <header>
             <a href='/'>
             <img src="../images/logo-new-edit-01.png"/>
             </a>
-            {/* <img src="../images/logo-new-edit-01.png"/> */}
+     
 			<nav ref={navRef}>
-				{/* <a href="/#">Discover Cooks</a> */}
+
 				<a href="/login">Sign In</a>
 				<a href="/cooklogin">Sign In As A Cook</a>
 				<button
@@ -65,32 +118,9 @@ const LandingNavbar  = () => {
 			<button className="nav-btn" onClick={showNavbar}>
 				<FaBars />
 			</button>
-		</header>
+		</header> */}
 
-{/* <Modal show={show} onHide={handleClose}>
-<Modal.Header closeButton>
-          <Modal.Title>Checkout</Modal.Title>
-        </Modal.Header>
-		<Modal.Body>
-		{productsCount > 0 ?
-                        <>
-                            <p>Items in your cart:</p>
-                            {cart.items.map( (currentProduct, idx) => (
-                                <DemoCart key={idx} id={currentProduct.id} quantity={currentProduct.quantity}></DemoCart>
-								// <h1>{currentProduct.id}</h1>
-                            ))}
 
-                            <h1>Total: {cart.getTotalCost().toFixed(2)}</h1>
-
-                            <button variant="success" onClick={checkout}>
-                                Purchase items!
-                            </button>
-                        </>
-                    :
-                        <h1>There are no items in your cart!</h1>
-                    }
-        </Modal.Body>
-	</Modal> */}
 	</>
 	);
 }

@@ -98,15 +98,8 @@ const CookDashboard = () => {
                        <span class="m-l-15">{firstname} {lastname}</span>
                      </p>
                      <p class="text-muted font-13">
-                       <strong>Mobile :</strong>
-                       <span class="m-l-15"></span>
-                     </p>
-                     <p class="text-muted font-13">
                        <strong>Email :</strong>{" "}
                        <span class="m-l-15">{email}</span>
-                     </p>
-                     <p class="text-muted font-13">
-                       <strong>Location :</strong> <span class="m-l-15">KH</span>
                      </p>
                      <p class="text-muted font-13">
                        <strong>Cuisine(s) :</strong>{" "}

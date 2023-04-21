@@ -45,9 +45,13 @@ const Sidebar = () => {
             </ul>
             
             <ul class="logout-mode">
-                <li><a href="/testapp">
+                <li><a href="/settings">
                     <i class="uil uil-signout"></i>
                     <span class="link-name">Settings</span>
+                </a></li>
+                <li><a href="/documents">
+                    <i class="uil uil-signout"></i>
+                    <span class="link-name">Documents</span>
                 </a></li>
                         <li>
                             <a href="#" onClick={handleLogout}>

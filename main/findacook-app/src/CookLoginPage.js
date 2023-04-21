@@ -52,14 +52,7 @@ function CookLoginPage() {
                         </a>
                     </div>
                     <h3>Welcome Back!</h3>
-                    <ul class="social">
-                        <li><a href="#" class="facebook"><FaFacebook />{' '}<span>Facebook</span></a></li>
-                        <li><a href="#" class="twitter"><BsTwitter />{' '}<span>Twitter</span></a></li>
-                        <li><a href="#" class="google"><FaGoogle />{' '}<span>Google</span></a></li>
-                    </ul>
-                    <div class="or-login clearfix">
-                        <span>Or</span>
-                    </div>
+
                     <div class="form-container">
                         <form onSubmit={login}>
                             <div class="form-group form-fg">
