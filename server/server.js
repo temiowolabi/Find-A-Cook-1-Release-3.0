@@ -6,16 +6,16 @@ const stripe = require('stripe')('sk_test_51MYbfMDYuzoeBKxGcMhrNfA5j9wjsN4QqBDDo
 //const cookieParser = require('cookie-parser');
 const session = require("express-session");
 
-const path = require('path')
-// Serve static files from the React frontend app
-app.use('/static', express.static(path.join(__dirname, '../../main/findacook-app/build')))
+// const path = require('path')
+// // Serve static files from the React frontend app
+// app.use('/static', express.static(path.join(__dirname, '../../main/findacook-app/build')))
 
-// // Anything that doesn't match the above, send back index.html
-// res.sendFile(path.join(__dirname, '../../main/findacook-app/build/index.html'))
+// // // Anything that doesn't match the above, send back index.html
+// // res.sendFile(path.join(__dirname, '../../main/findacook-app/build/index.html'))
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname,  '../main/findacook-app/build/index.html'));
-  });
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname,  '../main/findacook-app/build/index.html'));
+//   });
 
 
 require('./config/db')

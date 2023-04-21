@@ -27,7 +27,8 @@ const store = configureStore({
     reducer,
     initialState,
     middleware: middleware,
-    devTools: process.env.NODE_ENV !== 'production' && composeWithDevTools,
+    devTools: false
+    // devTools: process.env.NODE_ENV !== 'production' && composeWithDevTools,
 });
 
 export default store;
