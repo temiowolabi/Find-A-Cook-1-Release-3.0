@@ -28,7 +28,10 @@ const ScheduleRouter = require('./api/Schedule');
 const bodyParser = require('express').json;
 app.use(bodyParser());
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+        // "http://localhost:3000"
+        "https://findacook.onrender.com"
+    ],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
