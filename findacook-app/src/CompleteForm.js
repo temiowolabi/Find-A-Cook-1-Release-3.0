@@ -16,7 +16,7 @@ async function postImage({documents, description}) {
     },
   };
 
-  const result = await axios.post('http://localhost:5001/cook/documents', formData, config);
+  const result = await axios.post('https://findacook-backend.onrender.com/cook/documents', formData, config);
   return result.data;
 }
 

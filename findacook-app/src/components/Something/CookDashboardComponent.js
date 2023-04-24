@@ -18,7 +18,7 @@ async function postImage({documents, description}) {
     },
   };
 
-  const result = await axios.post('http://localhost:5001/cook/documents', formData, config);
+  const result = await axios.post('https://findacook-backend.onrender.com/cook/documents', formData, config);
   return result.data;
 }
 
@@ -61,7 +61,7 @@ const CookDashboard = () => {
   const [profile, setProfile] = useState("");
   axios.defaults.withCredentials = true
   useEffect(()=> {
-      axios.get('http://localhost:5001/cook/cookinfo')
+      axios.get('https://findacook-backend.onrender.com/cook/cookinfo')
       .then((res) => {
           setFirstName(res.data.firstn);
           setLastName(res.data.lastn);

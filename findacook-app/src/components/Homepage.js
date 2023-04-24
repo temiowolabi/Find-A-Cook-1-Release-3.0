@@ -20,7 +20,7 @@ const Homepage = () => {
   // Async function to fetch cooks data from server
   const fetchCooks = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/cook/allcooks");
+      const response = await axios.get("https://findacook-backend.onrender.com/cook/allcooks");
       setCooks(response.data.cooks); // set the state with the data
     } catch (error) {
       console.error("Error fetching cooks:", error);
@@ -32,11 +32,11 @@ const Homepage = () => {
     try {
       let response;
       if (searchValue === '') { // if search input is empty, fetch all cooks
-        response = await axios.get("http://localhost:5001/cook");
+        response = await axios.get("https://findacook-backend.onrender.com/cook");
       } else { // otherwise, search by cuisine or dish
         console.log("searchValue:", searchValue);
         const trimmedSearchValue = searchValue.trim(); // trim the search value
-        response = await axios.post("http://localhost:5001/cook/searchcooks", {
+        response = await axios.post("https://findacook-backend.onrender.com/cook/searchcooks", {
           type: 'both',
           query: trimmedSearchValue
         });

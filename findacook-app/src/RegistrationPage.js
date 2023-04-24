@@ -27,7 +27,7 @@ function RegistrationPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-    .post('http://localhost:5001/user/signup', user)
+    .post('https://findacook-backend.onrender.com/user/signup', user)
     .then((response) => {
       console.log("response received", response.data);
       setMessage(response.data.message);
