@@ -789,40 +789,154 @@ router.put("/editprofile", (req, res) => {
     }
   });
 
-router.post('/searchcooks', async (req, res) => {
-  // Get the type (cuisine, dish, or both) and search query from the request body
-  const { type, query } = req.body;
 
+
+  router.post('/searchcooks', async (req, res) => {
+    // Get the type (cuisine, dish, or both) and search query from the request body
+    const { type, query } = req.body;
+  
+    try {
+      let cooks;
+  
+      switch (type) {
+        case 'cuisine':
+          // Find the menu category that matches the cuisine query
+          const cuisine = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${query.toString()}$`, 'i') } });
+          if (!cuisine) {
+            // Return an empty response if the cuisine is not found
+            return res.json({ cooks: [] });
+          }
+          // Find all cooks with the matching cuisine
+          cooks = await Cook.find({ specialties: cuisine._id });
+          console.log('Found cooks by cuisine:', cooks); // log the found cooks
+          break;
+        case 'dish':
+          // Find all cooks with a dish that matches the dish query
+          cooks = await Cook.find({ 'dishes.dish': { $regex: new RegExp(`${query.toString()}`, 'i') } });
+          console.log('Found cooks by dish:', cooks); // log the found cooks
+          break;
+        case 'both':
+          // Find all cooks with a dish or cuisine that matches the search query
+          cooks = await Cook.find({
+            $or: [
+              { 'specialties': { $in: await MenuCategorySchema.find({category_name: {$regex: new RegExp(`${query}`, 'i')}}).select('_id') } },
+              { 'dishes.dish': { $regex: new RegExp(`${query}`, 'i') } }
+            ]
+          });
+          console.log('Found cooks by both:', cooks); // log the found cooks
+          break;
+      }
+  
+      // If no cooks were found, return an empty array
+      if (!cooks.length) {
+        return res.json({ cooks: [] });
+      }
+  
+      // Return the found cooks
+      res.json({ cooks });
+    } catch (err) {
+      console.log(err, 'filter Controller error');
+      // Return an error message if there is an error
+      res.status(500).json({
+        errorMessage: 'Please try again later',
+      });
+    }
+  });
+  
+
+
+
+
+// router.post('/searchcooks', async (req, res) => {
+//   // Get the type (cuisine, dish, or both) and search query from the request body
+//   const { type, query } = req.body;
+
+//   try {
+//     let cooks;
+
+//     switch (type) {
+//       case 'cuisine':
+//         // Find the menu category that matches the cuisine query
+//         const cuisine = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${query.toString()}$`, 'i') } });
+//         if (!cuisine) {
+//           // Return an empty response if the cuisine is not found
+//           return res.json({ cooks: [] });
+//         }
+//         // Find all cooks with the matching cuisine
+//         cooks = await Cook.find({ specialties: cuisine._id });
+//         console.log('Found cooks by cuisine:', cooks); // log the found cooks
+//         break;
+//       case 'dish':
+//         // Find all cooks with a dish that matches the dish query
+//         cooks = await Cook.find({ 'dishes.dish': { $regex: new RegExp(`${query.toString()}`, 'i') } });
+//         console.log('Found cooks by dish:', cooks); // log the found cooks
+//         break;
+//       case 'both':
+//         // Find all cooks with a dish or cuisine that matches the search query
+//         cooks = await Cook.find({
+//           $or: [
+//             { 'specialties': { $in: await MenuCategorySchema.find({category_name: {$regex: new RegExp(`${query}`, 'i')}}).select('_id') } },
+//             { 'dishes.dish': { $regex: new RegExp(`${query}`, 'i') } }
+//           ]
+//         });
+//         console.log('Found cooks by both:', cooks); // log the found cooks
+//         break;
+//     }
+
+//     // If no cooks were found, return an empty array
+//     if (!cooks.length) {
+//       return res.json({ cooks: [] });
+//     }
+
+//     // Return the found cooks
+//     res.json({ cooks });
+//   } catch (err) {
+//     console.log(err, 'filter Controller error');
+//     // Return an error message if there is an error
+//     res.status(500).json({
+//       errorMessage: 'Please try again later',
+//     });
+//   }
+// });
+
+
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await MenuCategorySchema.find({});
+    res.status(200).json(categories);
+  } catch (err) {
+    console.log('Category ReadAll Error: ', err);
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+router.get('/filterByCategory', async (req, res) => {
   try {
     let cooks;
 
-    switch (type) {
-      case 'cuisine':
-        // Find the menu category that matches the cuisine query
-        const cuisine = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${query.toString()}$`, 'i') } });
-        if (!cuisine) {
-          // Return an empty response if the cuisine is not found
-          return res.json({ cooks: [] });
-        }
-        // Find all cooks with the matching cuisine
-        cooks = await Cook.find({ specialties: cuisine._id });
-        console.log('Found cooks by cuisine:', cooks); // log the found cooks
-        break;
-      case 'dish':
-        // Find all cooks with a dish that matches the dish query
-        cooks = await Cook.find({ 'dishes.dish': { $regex: new RegExp(`${query.toString()}`, 'i') } });
-        console.log('Found cooks by dish:', cooks); // log the found cooks
-        break;
-      case 'both':
-        // Find all cooks with a dish or cuisine that matches the search query
-        cooks = await Cook.find({
-          $or: [
-            { 'specialties': { $in: await MenuCategorySchema.find({category_name: {$regex: new RegExp(`${query}`, 'i')}}).select('_id') } },
-            { 'dishes.dish': { $regex: new RegExp(`${query}`, 'i') } }
-          ]
-        });
-        console.log('Found cooks by both:', cooks); // log the found cooks
-        break;
+    // Get the category from the query parameters
+    const category = req.query.category;
+
+    // If category is specified in the query parameters, filter by category
+    if (category) {
+      // Find the menu category that matches the category query
+      const menuCategory = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${category.toString()}$`, 'i') } });
+
+      // If the category is not found, return an empty response
+      if (!menuCategory) {
+        return res.json({ cooks: [] });
+      }
+
+      // Find all cooks with the matching category
+      cooks = await Cook.find({ menu_categories: menuCategory._id });
+      console.log('Found cooks by category:', cooks); // log the found cooks
+    } else {
+      // If category is not specified, return all cooks
+      cooks = await Cook.find({});
+      console.log('Found all cooks:', cooks); // log all found cooks
     }
 
     // If no cooks were found, return an empty array
@@ -842,6 +956,73 @@ router.post('/searchcooks', async (req, res) => {
 });
 
 
+
+
+// GET all cooks filtered by category
+router.get('/getfiltercooks', async (req, res) => {
+  try {
+    const { category } = req.query;
+    let query = {};
+    if (category) {
+      query = { specialties: mongoose.Types.ObjectId(category) };
+    }
+    const cooks = await CookSchema.find(query).populate('specialties', 'category_name');
+    res.json({ cooks });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+router.get('/cooks', async (req, res) => {
+  try {
+    let cooks;
+
+    // Get the category from the query parameters
+    const category = req.query.category;
+
+    // If category is specified in the query parameters, filter by category
+    if (category) {
+      // Find the menu category that matches the category query
+      const menuCategory = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${category.toString()}$`, 'i') } });
+
+      // If the category is not found, return an empty response
+      if (!menuCategory) {
+        return res.json({ cooks: [] });
+      }
+
+      // Find all cooks with the matching category
+      cooks = await Cook.find({ specialties: menuCategory._id });
+      console.log('Found cooks by category:', cooks); // log the found cooks
+    } else {
+      // If category is not specified, return all cooks
+      cooks = await Cook.find({});
+      console.log('Found all cooks:', cooks); // log all found cooks
+    }
+
+    // If no cooks were found, return an empty array
+    if (!cooks.length) {
+      return res.json({ cooks: [] });
+    }
+
+    // Return the found cooks
+    res.json({ cooks });
+  } catch (err) {
+    console.log(err, 'filter Controller error');
+    // Return an error message if there is an error
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+
+
+
 router.get('/menuitems', async (req, res) => {
   try {
     const cookId = req.session.cook._id; // Retrieve the cook ID from the session
@@ -852,6 +1033,46 @@ router.get('/menuitems', async (req, res) => {
     res.json({ status: 'ERROR', message: 'Error retrieving menu items' });
   }
 });
+
+
+
+
+
+
+
+
+router.get('/cooksByCategory', async (req, res) => {
+  const { category } = req.query;
+  try {
+    const cooks = await Cook.find({ specialties: category });
+    res.json({ cooks });
+  } catch (error) {
+    console.error("Error filtering cooks by category:", error);
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+router.post('/filtercooks', async (req, res) => {
+  try {
+    let cooks;
+    const { category_name } = req.body;
+    const category = await MenuCategorySchema.findOne({ category_name });
+    if (!category) { // handle case where category is not found
+      return res.status(404).json({ status: 'ERROR', message: 'Category not found' });
+    }
+    cooks = await Cook.find({ specialties: category._id });
+    console.log('Found cooks by cuisine:', cooks); // log the found cooks
+    res.status(200).json({ status: 'SUCCESS', cooks });
+  } catch (error) {
+    console.error('Error filtering cooks', error);
+    res.status(500).json({ status: 'ERROR', message: 'Error filtering cooks' });
+  }
+});
+
+
 
 
 module.exports = router;

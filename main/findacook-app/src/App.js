@@ -27,6 +27,8 @@ import RegisinfoPage from './RegisInfoPage';
 import TermsPage from './TermsPage';
 import CookProfile from './CookProfile';
 import ViewCooks from './ViewCooks';
+import FAQ from './FAQ';
+import Contact from './Contact';
 
 
 import VerificationPage from './VerificationPage';
@@ -107,6 +109,8 @@ function App() {
       <Route path="/julianmenu" element={<JulianMenu />} />
       <Route path="/mortmenu" element={<MortMenu />} />
       <Route path="/addmenu" element={<AddMenu />} />
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="/contactus" element={<Contact />} />
   </Routes>
     </div>
   );

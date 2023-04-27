@@ -135,3 +135,185 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+
+
+
+
+
+
+  .restaurant-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .restaurant {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 900px;
+  }
+  
+  .restaurant-images {
+    position: relative;
+    width: 250px;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .restaurant-food-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .restaurant-profile-image {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .restaurant-details {
+    padding: 20px;
+    flex: 1;
+  }
+  
+  .restaurant-name {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer; 
+  }
+
+  .cuisine-type {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    display: inline-block; /* add this line to make the cuisine type appear next to the name */
+    margin-left: 10px; /* add this line to add some space between the name and cuisine type */
+  }
+
+  .restaurant-name:hover {
+    text-decoration: underline; 
+  }
+  
+  .restaurant-description {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+  
+  .restaurant-address {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  @media (max-width: 900px) {
+    .restaurant {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .restaurant-images {
+      height: 150px;
+    }
+    
+    .restaurant-profile-image {
+      height: 40px;
+      width: 40px;
+    }
+  }
+  
+
+
+
+
+
+
+
+  .filter-section {
+    float: left;
+    width: 20%;
+    padding: 20px;
+
+  }
+  
+  .filter-section h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .filter-section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .filter-section li {
+    margin-bottom: 10px;
+  }
+  
+  .filter-section li label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .filter-section li input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .filter-card {
+  border: 1px solid gray;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.filter-card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filter-card:hover {
+  background-color: #f8f8f8;
+}
+
+.filter-card span {
+  flex: 1;
+}
+
+.filter-card span:hover {
+  text-decoration: underline;
+}
+
+.filter-card:hover span {
+  font-weight: bold;
+}
+
+.filter-card:hover::before {
+  content: "\2713";
+  margin-right: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}

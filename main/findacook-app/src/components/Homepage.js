@@ -11,6 +11,36 @@ const Homepage = () => {
   const [cooks, setCooks] = useState([]); // array of cook objects
   const [bookingDate, setBookingDate] = useState(); // selected booking date
   const [searchValue, setSearchValue] = useState(''); // search input value
+  const [filteredCooks, setFilteredCooks] = useState([]);
+
+  const [categories, setCategories] = useState([]);
+
+  // useEffect(() => {
+  //   async function fetchCategories() {
+  //     const response = await fetch('http://localhost:5001/cook/categories');
+  //     const data = await response.json();
+  //     setCategories(data.categories);
+  //   }
+
+  //   fetchCategories();
+  // }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get('http://localhost:5001/cook/menucategories');
+            if (response.data.status === 'SUCCESS') {
+                setCategories(response.data.menuCategories);
+            } else {
+                alert('Error fetching menu categories');
+            }
+        } catch (error) {
+            console.error('Error Fetching categories', error);
+        }
+      };
+      fetchCategories();
+  }, []);
+
 
   // Use an effect hook to fetch cooks data on component mount
   useEffect(() => {
@@ -48,11 +78,23 @@ const Homepage = () => {
   };
   
   
+  const handleFilter = async (categoryName) => {
+    try {
+      const response = await axios.post('http://localhost:5001/cook/filtercooks', {
+        category_name: categoryName,
+      });
+      setFilteredCooks(response.data.cooks);
+    } catch (error) {
+      console.error('Error filtering cooks', error);
+    }
+  };
+  
+
   
   
-  // Async function to clear the search and fetch all cooks
   const handleClearSearch = async () => {
     setSearchValue('');
+    setFilteredCooks([]);
     try {
       const response = await axios.get("http://localhost:5001/cook/allcooks");
       setCooks(response.data.cooks); // set the state with all the cooks
@@ -92,7 +134,7 @@ const Homepage = () => {
               className="clearSearch"
               type="button"
               onClick={handleClearSearch}
-              disabled={searchValue === ''}
+              // disabled={searchValue === ''}
             >
               Clear Search
             </button>
@@ -100,15 +142,52 @@ const Homepage = () => {
         </nav>
       </div>
   
-      <div class="test-container">
-        <div class="profile-info">
-          <div class="product-section">
-            {cooks.map((cook, index) => (
-              <Cook key={cook._id} cook={cook} bookingDate={bookingDate} />
+      <div className="filter-section">
+  <h3>Filter by Cuisine:</h3>
+  <ul>
+          {categories &&
+            categories.map((category) => (
+              <div className="filter-card" key={category.id} onClick={() => handleFilter(category.category_name)}>
+                <li>{category.category_name}</li>
+              </div>
             ))}
-          </div>   
-        </div>   
-      </div>
+        </ul>
+</div>
+
+<div className="restaurant-list">
+{(filteredCooks.length > 0 ? filteredCooks : cooks).map((cook, index) => (
+
+  <div className="restaurant" key={cook._id}>
+      <div class="restaurant-images">
+    <img src="../images/gnocchi.jpg" alt="Restaurant Image" className='restaurant-food-image' />
+    <img src="../images/cook1.jpg" alt="User Profile Picture" className="restaurant-profile-image" />
+  </div>
+
+    <div className="restaurant-details">
+      <h2 className="restaurant-name">{cook.cook_first_name}</h2>
+      <p className="cuisine-type">{cook.specialties}</p>
+      <p className="rating">⭐ {Math.floor(Math.random() * 5) + 1} / 5 ({Math.floor(Math.random() * 100)})</p>
+    </div>
+  </div>
+))} 
+   
+
+{/* {cooks.map((cook, index) => (
+  <div className="restaurant" key={cook._id}>
+      <div class="restaurant-images">
+    <img src="../images/gnocchi.jpg" alt="Restaurant Image" className='restaurant-food-image' />
+    <img src="../images/cook1.jpg" alt="User Profile Picture" className="restaurant-profile-image" />
+  </div>
+
+    <div className="restaurant-details">
+      <h2 className="restaurant-name">{cook.cook_first_name}</h2>
+      <p className="cuisine-type">{cook.specialties}</p>
+      <p className="rating">⭐ {Math.floor(Math.random() * 5) + 1} / 5 ({Math.floor(Math.random() * 100)})</p>
+    </div>
+  </div>
+))} */}
+
+</div>
     </>
   );
 };

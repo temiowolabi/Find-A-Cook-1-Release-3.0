@@ -19,7 +19,7 @@ const InfoSection = () => {
       },
     ];
     return (
-      <div className="work-section-wrapper">
+      <div className="work-section-wrapper" id="serviceSection">
         <div className="work-section-top">
           <h1 className="primary-heading">How It Works</h1>
           <p className="primary-text">
