@@ -3,13 +3,18 @@
     flex-wrap: wrap;
   }
 
+  .container h3{
+    text-align: center;
+    margin-bottom: 21em;
+  }
+
   .adminCookDisplay {
     /* position: absolute; */
     z-index: 2;
     /* left: 30%;
     top: 85%; */
-    margin-left: 20em;
-    margin-top: 25em;
+    margin-left: 25em;
+    margin-top: 35em;
     transform: translate(-50%,-50%);
     width: 70%; 
     border-collapse: collapse;
@@ -48,3 +53,50 @@
     width: 2em;
     cursor: pointer;
    }
+
+
+
+.accept-btn {
+  background-color: #4CAF50; 
+  border: none; 
+  color: white;
+  padding: 10px 20px; 
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block; 
+  font-size: 16px; 
+  margin: 10px 5px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+}
+
+
+
+.decline-btn {
+  background-color: #f44336; 
+  border: none; 
+  color: white; 
+  padding: 10px 20px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  font-size: 16px; 
+  margin: 10px 5px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+}
+
+
+.close-btn {
+  background-color: #5c5b5b; 
+  border: none; 
+  color: white; 
+  padding: 10px 20px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  font-size: 16px; 
+  margin: 10px 5px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+}

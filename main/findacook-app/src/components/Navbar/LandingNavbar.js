@@ -62,7 +62,36 @@ const LandingNavbar  = () => {
       handleModalClose();
     };
 
+    // function handleNavigationClick(event) {
+    //   event.preventDefault();
+  
+    //   const targetId = event.target.hash;
+    //   const targetElement = document.querySelector(targetId);
+  
+    //   if (targetElement) {
+    //     targetElement.scrollIntoView({ behavior: 'smooth' });
+    //   } else if (window.location.pathname !== '/') {
+    //     navigate(`/?scrollTo=${targetId}`);
+    //   }
+    // }
 
+    // useEffect(() => {
+    //   const targetId = window.location.hash;
+    //   const targetElement = document.querySelector(targetId);
+  
+    //   if (targetElement) {
+    //     targetElement.scrollIntoView({ behavior: 'smooth' });
+    //   } else if (window.location.search === '?scrollTo=' + targetId) {
+    //     const timeoutId = setTimeout(() => {
+    //       const newTargetElement = document.querySelector(targetId);
+    //       if (newTargetElement) {
+    //         newTargetElement.scrollIntoView({ behavior: 'smooth' });
+    //       }
+    //     }, 500);
+
+    //     return () => clearTimeout(timeoutId);
+    //   }
+    // }, []);
 
 	return (
 		<>

@@ -1555,6 +1555,8 @@ label {
 	outline: none;
 	margin-right: 10px;
 	width: 300px;
+	margin-top: 20px;
+	margin-bottom: 20px;
   }
 
   .search-container button[type=submit] {

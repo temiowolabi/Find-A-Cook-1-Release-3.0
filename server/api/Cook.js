@@ -756,25 +756,134 @@ router.put("/editprofile", (req, res) => {
     }
   });
   
-  
-  router.post('/:cookId/dish', async (req, res) => {
+
+
+
+  router.post('/dish', async (req, res) => {
     try {
-      const dish = new MenuItemSchema(req.body);
-      dish.cook_id = req.params.cookId;
-      await dish.save();
+      const cookId = req.session.cook;
+      // const cook = req.session.cook;
+  
+      if (!cookId) {
+        return res.json({
+          status: 'FAILED',
+          message: 'Not authorized to add menu items',
+        });
+      }
+      // if (!cookId) {
+      //   return res.status(401).json({ message: 'Unauthorized' });
+      // }
+  
+      const { dish, dish_description, price, category } = req.body;
+      const newDish = new MenuItemSchema({
+        dish,
+        dish_description,
+        price,
+        category,
+        cook_id: cookId,
+      });
+  
+      await newDish.save();
   
       // Find the cook and add the dish to their dishes array
       const cook = await Cook.findByIdAndUpdate(
-        req.params.cookId,
-        { $push: { dishes: dish } },
+        cookId,
+        { $push: { dishes: newDish } },
         { new: true }
       );
   
-      res.status(201).json(dish);
+      res.status(201).json(newDish);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   });
+  
+
+
+
+
+  
+  // router.post('/dish', async (req, res) => {
+  //   const cook = req.session.cook;
+  //   const { dish, dish_description, price, category } = req.body;
+  //   console.log(dish, dish_description, price, category);
+  //   if (!dish || !dish_description || !price || !category) {
+  //     return res.json({
+  //       status: 'FAILED',
+  //       message: 'Missing required fields: dish, dish_description, price, or category',
+  //     });
+  //   }
+  
+  //   const menuItem = new MenuItemSchema({
+  //     dish: dish,
+  //     dish_description: dish_description,
+  //     price: price,
+  //     category: category,
+  //   });
+  
+  //   try {
+  //     const updateCook = await Cook.findByIdAndUpdate(
+  //       cook._id,
+  //       { $push: { dishes: menuItem } },
+  //       { new: true }
+  //     );
+  
+  //     res.json({
+  //       status: 'SUCCESS',
+  //       message: 'Menu item added successfully',
+  //       updateCook: updateCook,
+  //     });
+  //   } catch (error) {
+  //     res.json({
+  //       status: 'FAILED',
+  //       message: 'Error adding menu item',
+  //       error: error,
+  //     });
+  //   }
+  // });
+  
+
+
+
+  // router.post('/:cookId/dish', async (req, res) => {
+  //   try {
+  //     const dish = new MenuItemSchema(req.body);
+  //     dish.cook_id = req.params.cookId;
+  //     await dish.save();
+  
+  //     // Find the cook and add the dish to their dishes array
+  //     const cook = await Cook.findByIdAndUpdate(
+  //       req.params.cookId,
+  //       { $push: { dishes: dish } },
+  //       { new: true }
+  //     );
+  
+  //     res.status(201).json(dish);
+  //   } catch (error) {
+  //     res.status(400).json({ message: error.message });
+  //   }
+  // });
+
+
+  // router.post('/dish', async (req, res) => {
+  //   try {
+  //     const cook = req.session.cook;
+  //     const dish = new MenuItemSchema(req.body);
+  //     dish.cook_id = req.params.cookId;
+  //     await dish.save();
+  
+  //     // Find the cook and add the dish to their dishes array
+  //     const updatedCook = await Cook.findByIdAndUpdate(
+  //       req.params.cookId,
+  //       { $push: { dishes: dish } },
+  //       { new: true }
+  //     );
+  
+  //     res.status(201).json(dish);
+  //   } catch (error) {
+  //     res.status(400).json({ message: error.message });
+  //   }
+  // });
 
 
   router.get('/:cookId', async (req, res) => {
@@ -1071,6 +1180,60 @@ router.post('/filtercooks', async (req, res) => {
     res.status(500).json({ status: 'ERROR', message: 'Error filtering cooks' });
   }
 });
+
+
+
+
+
+
+
+router.post('/dishy', upload2.single('imageurls'), async (req, res) => {
+   
+  const cook = req.session.cook;
+
+  if (!cook) {
+    return res.json({
+      status: 'FAILED',
+      message: 'Not authorized to add menu items',
+    });
+  }
+
+  console.log('Request body:', req.body);
+  const { dish, dish_description, price, category } = req.body;
+  console.log('New Dish: ', req.body)
+  try {
+
+    let newDish = new MenuItemSchema({
+      cook_id: cook._id,
+      dish: dish,
+      dish_description: dish_description,
+      price: price,
+      category: category,
+    })
+    // dish.cook_id = cook._id;
+    await newDish.save();
+
+    // Find the cook and add the dish to their dishes array
+    const updatedCook = await Cook.findByIdAndUpdate(
+      cook._id,
+      { $push: { dishes: newDish } },
+      { new: true }
+    );
+
+    res.json({
+      status: 'SUCCESS',
+      message: 'Menu item added successfully',
+      updatedCook: updatedCook,
+    });
+  } catch (err) {
+    res.json({
+      status: 'FAILED',
+      message: 'Error adding menu item',
+      error: err,
+    });
+  }
+});
+
 
 
 

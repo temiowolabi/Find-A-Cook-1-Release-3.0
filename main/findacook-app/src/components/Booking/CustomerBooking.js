@@ -101,9 +101,13 @@ const CustomerBooking = () => {
  			  <p><img src='/images/rating.jpg' id="rating-img"/>(67 reviews)</p>
  		  </div>
  		<p>{cook.description}</p>
-     <span className="selectedDatesHighlight">
-          Selected Date: {theDate}
-            </span>
+
+     <ul>
+        {cook.dishes && cook.dishes.map(dish => (
+          <li key={dish._id}>{dish.dish}</li>
+          
+        ))}
+      </ul>
 
 		 <div className="cookFoodImages">
                 <div className="cookFoodImgWrapper" >

@@ -8,7 +8,7 @@ function AddMenuItem() {
     dish_description: '',
     price: '',
     category: '',
-    imageurls: null,
+    // imageurls: null,
   });
 
   const [categories, setCategories] = useState([]);
@@ -69,14 +69,15 @@ function AddMenuItem() {
                 'Content-Type': 'multipart/form-data',
             },
         };
-      await axios.post('http://localhost:5001/cook/addmenuitem', formData, config);
+      console.log('Form data:', formData);
+      await axios.post('http://localhost:5001/cook/dishy', formData, config);
       alert('Menu item added successfully');
       setForm({
         dish: '',
         dish_description: '',
         price: '',
         category: '',
-        imageurls: [],
+        // imageurls: [],
       });
     } catch (error) {
       console.error('Error adding menu item:', error);
@@ -136,14 +137,14 @@ function AddMenuItem() {
             ))}
           </select>
         </div>
-        <div>
+        {/* <div>
           <label>Images:</label>
           <input
             type="file"
             name="imageurls"
             onChange={handleImageChange}
           />
-        </div>
+        </div> */}
         <button type="submit">Add Menu Item</button>
       </form>
     </div>
