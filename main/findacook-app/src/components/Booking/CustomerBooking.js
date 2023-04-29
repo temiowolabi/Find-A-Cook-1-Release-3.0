@@ -8,16 +8,48 @@ import { FaWindowClose } from 'react-icons/fa'
 import { Modal, Button } from "react-bootstrap";
 import BookingForm from './BookingForm';
 import moment from 'moment';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+
+
+const blockedDates = [
+  new Date(2023, 4, 5), // May 5th, 2022
+  new Date(2023, 5, 3), // June 3rd, 2022
+  new Date(2023, 5, 15), // June 15th, 2022
+  new Date(2023, 6, 21), // July 21st, 2022
+  new Date(2023, 7, 10), // August 10th, 2022
+];
+
+function isDateBlocked(date) {
+  return blockedDates.find((blockedDate) =>
+    date.getFullYear() === blockedDate.getFullYear() &&
+    date.getMonth() === blockedDate.getMonth() &&
+    date.getDate() === blockedDate.getDate()
+  );
+}
 
 const CustomerBooking = () => {
 	const [slideNumber, setSlideNumber] = useState(0);
 	const [open, setOpen] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
   const [show, setShow] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
+  const [date, setDate] = useState(new Date());
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
   
+
+    function handleSelectDate(date) {
+      if (isDateBlocked(date)) {
+        return;
+      }
+      setSelectedDate(date);
+    }
+  
+    function tileDisabled({ date }) {
+      return isDateBlocked(date);
+    }
 
 	const handleOpen = (i) => {
 		setSlideNumber(i);
@@ -56,6 +88,11 @@ const CustomerBooking = () => {
 
   // const { roomid, bookingDate } = useParams();
   const theDate = moment(bookingDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+
+
+
+
+
   
     return (
 <>
@@ -92,7 +129,8 @@ const CustomerBooking = () => {
 <div className="cookWrapper">
 <button className="bookNow" onClick={handleShow}>Book Now!</button>
  	  <div className="profile-picture">
- 		<img src={`/uploads/${cook.profile_picture}`} alt="Profile Picture" />
+ 		{/* <img src={`/uploads/${cook.profile_picture}`} alt="Profile Picture" /> */}
+    <img src="/images/cook1.jpg" />
  	  </div>
 <h1 className="cookName">{cook.cook_first_name} {cook.cook_last_name}</h1>
  		<div className="credentials">
@@ -104,8 +142,10 @@ const CustomerBooking = () => {
 
      <ul>
         {cook.dishes && cook.dishes.map(dish => (
+          <>
           <li key={dish._id}>{dish.dish}</li>
-          
+          <li key={dish._id}>{dish.imageurls}</li>
+          </>
         ))}
       </ul>
 
@@ -113,7 +153,7 @@ const CustomerBooking = () => {
                 <div className="cookFoodImgWrapper" >
                   <img
                     // onClick={() => setOpen(true)}
-                    src='/images/bao.jpg'
+                    src='/images/sushi.jpg'
                     alt=""
                     className="cookFoodlImg"
                   />
@@ -122,7 +162,7 @@ const CustomerBooking = () => {
 				<div className="cookFoodImgWrapper" >
                   <img
                     // onClick={() => handleOpen(i)}
-                    src='/images/bao.jpg'
+                    src='/images/ramen.jpg'
                     alt=""
                     className="cookFoodlImg"
                   />
@@ -131,7 +171,7 @@ const CustomerBooking = () => {
 				<div className="cookFoodImgWrapper" >
                   <img
                     // onClick={() => handleOpen(i)}
-                    src='/images/bao.jpg'
+                    src='/images/rice.jpg'
                     alt=""
                     className="cookFoodlImg"
                   />
@@ -140,7 +180,7 @@ const CustomerBooking = () => {
 				<div className="cookFoodImgWrapper" >
                   <img
                     // onClick={() => handleOpen(i)}
-                    src='/images/bao.jpg'
+                    src='/images/udon.jpg'
                     alt=""
                     className="cookFoodlImg"
                   />
@@ -149,7 +189,7 @@ const CustomerBooking = () => {
 				<div className="cookFoodImgWrapper" >
                   <img
                     // onClick={() => handleOpen(i)}
-                    src='/images/bao.jpg'
+                    src='/images/chicken.jpg'
                     alt=""
                     className="cookFoodlImg"
                   />
@@ -159,7 +199,7 @@ const CustomerBooking = () => {
 				<div className="cookFoodImgWrapper" >
                   <img
                     // onClick={() => handleOpen(i)}
-                    src='/images/bao.jpg'
+                    src='/images/katsu.jpg'
                     alt=""
                     className="cookFoodlImg"
                   />
@@ -186,46 +226,21 @@ const CustomerBooking = () => {
 
 			<Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-            <Modal.Title>Select your menu items: </Modal.Title>
+            {/* <Modal.Title>Select your menu items: </Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
-        <div className="rItem" >
-            <div className="rItemInfo">
-              <div className="rTitle">Bao Buns</div>
-              <div className="rDesc">Yum</div>
-
-              <div className="rPrice">€10</div>
-            </div>
-            <div className="selectFood">
-
-                <div className="food">
-                  <input
-                    type="checkbox"
-                  />
-                </div>
-        
-            </div>
-
-          </div>
-
-		  <div className="rItem" >
-            <div className="rItemInfo">
-              <div className="rTitle">Beef Burger </div>
-              <div className="rDesc">Tasty</div>
-
-              <div className="rPrice">€10</div>
-            </div>
-            <div className="selectFood">
-
-                <div className="food">
-                  <input
-                    type="checkbox"
-                  />
-                </div>
-        
-            </div>
-
-          </div>
+        <div className='booking-app'>
+      <h1 className='text-center'>Pick A Date</h1>
+      <div className='calendar-container'>
+        <Calendar         onChange={handleSelectDate}
+        value={selectedDate}
+        tileDisabled={tileDisabled} />
+      </div>
+      <p className='text-center'>
+        <span className='bold'>Selected Date:</span>{' '}
+        {date.toDateString()}
+      </p>
+    </div>
         </Modal.Body>
         <Modal.Footer>
             <button className='modalButton' onClick={handleClose}>

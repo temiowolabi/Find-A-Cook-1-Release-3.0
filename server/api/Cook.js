@@ -28,6 +28,19 @@ router.get('/images/:key', (req, res) => {
   readStream.pipe(res)
 })
 
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+      cb(null, `${Date.now()}.jpg`);
+  },
+});
+
+var upload = multer({ storage });
+
+
 // router.post('/images', upload2.single('image'), async (req, res) => {
 //   const file = req.file;
 //   console.log(file); // add this line to see if file is being received
@@ -75,14 +88,14 @@ router.get('/images/:key', (req, res) => {
 //   region: process.env.S3_BUCKET_REGION,
 // })
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname);
-    },
-  });
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//       cb(null, 'uploads/');
+//     },
+//     filename: (req, file, cb) => {
+//       cb(null, Date.now() + '-' + file.originalname);
+//     },
+//   });
 
   // const documentUpload = (bucketName) => multer({
   //   storage: multerS3({
@@ -98,7 +111,7 @@ const storage = multer.diskStorage({
   // })
   
 
-  const upload = multer({ storage: storage });
+  // const upload = multer({ storage: storage });
 
 require('dotenv').config();
 
@@ -1187,7 +1200,7 @@ router.post('/filtercooks', async (req, res) => {
 
 
 
-router.post('/dishy', upload2.single('imageurls'), async (req, res) => {
+router.post('/dishy', upload.single('imageurls'), async (req, res) => {
    
   const cook = req.session.cook;
 
@@ -1209,6 +1222,7 @@ router.post('/dishy', upload2.single('imageurls'), async (req, res) => {
       dish_description: dish_description,
       price: price,
       category: category,
+      imageurls: req.file ? req.file.path : null,
     })
     // dish.cook_id = cook._id;
     await newDish.save();

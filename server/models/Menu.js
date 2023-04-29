@@ -26,6 +26,10 @@ const menus = new Schema(
       ref: 'Category',
       required: true,
     },
+    imageurls: {
+            type: String,
+            required: true,
+        },
     // imageurls: String,
     // currentbookings: []
   },

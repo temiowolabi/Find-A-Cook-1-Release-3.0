@@ -1,4 +1,5 @@
 const app = require('express')();
+const express = require('express');
 const port = 5001;
 const cors = require("cors");
 const stripe = require('stripe')('sk_test_51MYbfMDYuzoeBKxGcMhrNfA5j9wjsN4QqBDDofXq7ZXgfJhZB1K5R9MrUQZAEGVdzUgxgFcLyzSWIXLgbtUSD2Fz00NY3BBAUN');
@@ -116,10 +117,11 @@ app.use(session({
     }
 }))
 
-
+app.use(express.json());
 app.use('/user', UserRouter)
 app.use('/cook', CookRouter)
 app.use('/schedule', ScheduleRouter)
+app.use('/uploads', express.static('uploads'));
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
