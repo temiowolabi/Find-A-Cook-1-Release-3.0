@@ -1,0 +1,103 @@
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .container h3{
+    margin-left: 2em;
+    margin-bottom: 21em;
+    position: absolute;
+  }
+
+  .adminCookDisplay {
+    /* position: absolute; */
+    z-index: 2;
+    /* left: 30%;
+    top: 85%; */
+    margin-left: 10em;
+    margin-top: 35em;
+    transform: translate(-50%,-50%);
+    width: 70%; 
+    border-collapse: collapse;
+    border-spacing: 0;
+    box-shadow: 0 2px 15px rgba(64,64,64,.7);
+    border-radius: 12px 12px 0 0;
+    /* overflow: hidden; */
+
+}
+
+.adminCookDisplay td , .adminCookDisplay th{
+    padding: 15px 20px;
+    text-align: center;
+    
+   
+   }
+   .adminCookDisplay th{
+    background-color: #1f3744;
+    color: #fafafa;
+    font-family: 'Open Sans',Sans-serif;
+    font-weight: 200;
+    text-transform: uppercase;
+   
+   }
+
+  .adminCookDisplay tr{
+    width: 100%;
+    background-color: #fafafa;
+    font-family: 'Montserrat', sans-serif;
+   }
+  .adminCookDisplay tr:nth-child(even){
+    background-color: #eeeeee;
+   }
+
+   .applicationIcon{
+    width: 2em;
+    cursor: pointer;
+   }
+
+
+
+.accept-btn {
+  background-color: #4CAF50; 
+  border: none; 
+  color: white;
+  padding: 10px 20px; 
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block; 
+  font-size: 16px; 
+  margin: 10px 5px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+}
+
+
+
+.decline-btn {
+  background-color: #f44336; 
+  border: none; 
+  color: white; 
+  padding: 10px 20px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  font-size: 16px; 
+  margin: 10px 5px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+}
+
+
+.close-btn {
+  background-color: #5c5b5b; 
+  border: none; 
+  color: white; 
+  padding: 10px 20px; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  font-size: 16px; 
+  margin: 10px 5px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+}
