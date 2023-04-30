@@ -1,4 +1,4 @@
-const Category = require('../schema/MenuCategorySchema');
+const Category = require('../models/MenuCategory');
 
 exports.create = async (req, res) => {
     const { category_name, category_description } = req.body;
