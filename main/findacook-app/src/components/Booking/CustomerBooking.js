@@ -144,7 +144,7 @@ const CustomerBooking = () => {
         {cook.dishes && cook.dishes.map(dish => (
           <>
           <li key={dish._id}>{dish.dish}</li>
-          <li key={dish._id}>{dish.imageurls}</li>
+          <li key={dish._id}>  <img src={`/uploads/uploads/${dish.imageurls}`} alt="" /></li>
           </>
         ))}
       </ul>
