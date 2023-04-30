@@ -69,7 +69,12 @@ function AddMenuItem() {
                 'Content-Type': 'multipart/form-data',
             },
         };
+<<<<<<< HEAD:findacook-app/src/components/cooks/AddCookItem.js
       await axios.post('https://findacook-backend.onrender.com/cook/addmenuitem', formData, config);
+=======
+      console.log('Form data:', formData);
+      await axios.post('http://localhost:5001/cook/dishy', formData, config);
+>>>>>>> booking:main/findacook-app/src/components/cooks/AddCookItem.js
       alert('Menu item added successfully');
       setForm({
         dish: '',

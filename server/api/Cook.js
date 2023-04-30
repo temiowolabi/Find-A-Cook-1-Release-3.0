@@ -32,6 +32,19 @@ router.get('/images/:key', (req, res) => {
   readStream.pipe(res)
 })
 
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+      cb(null, `${Date.now()}.jpg`);
+  },
+});
+
+var upload = multer({ storage });
+
+
 // router.post('/images', upload2.single('image'), async (req, res) => {
 //   const file = req.file;
 //   console.log(file); // add this line to see if file is being received
@@ -79,14 +92,14 @@ router.get('/images/:key', (req, res) => {
 //   region: process.env.S3_BUCKET_REGION,
 // })
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname);
-    },
-  });
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//       cb(null, 'uploads/');
+//     },
+//     filename: (req, file, cb) => {
+//       cb(null, Date.now() + '-' + file.originalname);
+//     },
+//   });
 
   // const documentUpload = (bucketName) => multer({
   //   storage: multerS3({
@@ -102,7 +115,7 @@ const storage = multer.diskStorage({
   // })
   
 
-  const upload = multer({ storage: storage });
+  // const upload = multer({ storage: storage });
 
 require('dotenv').config();
 
@@ -760,25 +773,134 @@ router.put("/editprofile", (req, res) => {
     }
   });
   
-  
-  router.post('/:cookId/dish', async (req, res) => {
+
+
+
+  router.post('/dish', async (req, res) => {
     try {
-      const dish = new MenuItemSchema(req.body);
-      dish.cook_id = req.params.cookId;
-      await dish.save();
+      const cookId = req.session.cook;
+      // const cook = req.session.cook;
+  
+      if (!cookId) {
+        return res.json({
+          status: 'FAILED',
+          message: 'Not authorized to add menu items',
+        });
+      }
+      // if (!cookId) {
+      //   return res.status(401).json({ message: 'Unauthorized' });
+      // }
+  
+      const { dish, dish_description, price, category } = req.body;
+      const newDish = new MenuItemSchema({
+        dish,
+        dish_description,
+        price,
+        category,
+        cook_id: cookId,
+      });
+  
+      await newDish.save();
   
       // Find the cook and add the dish to their dishes array
       const cook = await Cook.findByIdAndUpdate(
-        req.params.cookId,
-        { $push: { dishes: dish } },
+        cookId,
+        { $push: { dishes: newDish } },
         { new: true }
       );
   
-      res.status(201).json(dish);
+      res.status(201).json(newDish);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   });
+  
+
+
+
+
+  
+  // router.post('/dish', async (req, res) => {
+  //   const cook = req.session.cook;
+  //   const { dish, dish_description, price, category } = req.body;
+  //   console.log(dish, dish_description, price, category);
+  //   if (!dish || !dish_description || !price || !category) {
+  //     return res.json({
+  //       status: 'FAILED',
+  //       message: 'Missing required fields: dish, dish_description, price, or category',
+  //     });
+  //   }
+  
+  //   const menuItem = new MenuItemSchema({
+  //     dish: dish,
+  //     dish_description: dish_description,
+  //     price: price,
+  //     category: category,
+  //   });
+  
+  //   try {
+  //     const updateCook = await Cook.findByIdAndUpdate(
+  //       cook._id,
+  //       { $push: { dishes: menuItem } },
+  //       { new: true }
+  //     );
+  
+  //     res.json({
+  //       status: 'SUCCESS',
+  //       message: 'Menu item added successfully',
+  //       updateCook: updateCook,
+  //     });
+  //   } catch (error) {
+  //     res.json({
+  //       status: 'FAILED',
+  //       message: 'Error adding menu item',
+  //       error: error,
+  //     });
+  //   }
+  // });
+  
+
+
+
+  // router.post('/:cookId/dish', async (req, res) => {
+  //   try {
+  //     const dish = new MenuItemSchema(req.body);
+  //     dish.cook_id = req.params.cookId;
+  //     await dish.save();
+  
+  //     // Find the cook and add the dish to their dishes array
+  //     const cook = await Cook.findByIdAndUpdate(
+  //       req.params.cookId,
+  //       { $push: { dishes: dish } },
+  //       { new: true }
+  //     );
+  
+  //     res.status(201).json(dish);
+  //   } catch (error) {
+  //     res.status(400).json({ message: error.message });
+  //   }
+  // });
+
+
+  // router.post('/dish', async (req, res) => {
+  //   try {
+  //     const cook = req.session.cook;
+  //     const dish = new MenuItemSchema(req.body);
+  //     dish.cook_id = req.params.cookId;
+  //     await dish.save();
+  
+  //     // Find the cook and add the dish to their dishes array
+  //     const updatedCook = await Cook.findByIdAndUpdate(
+  //       req.params.cookId,
+  //       { $push: { dishes: dish } },
+  //       { new: true }
+  //     );
+  
+  //     res.status(201).json(dish);
+  //   } catch (error) {
+  //     res.status(400).json({ message: error.message });
+  //   }
+  // });
 
 
   router.get('/:cookId', async (req, res) => {
@@ -793,40 +915,154 @@ router.put("/editprofile", (req, res) => {
     }
   });
 
-router.post('/searchcooks', async (req, res) => {
-  // Get the type (cuisine, dish, or both) and search query from the request body
-  const { type, query } = req.body;
 
+
+  router.post('/searchcooks', async (req, res) => {
+    // Get the type (cuisine, dish, or both) and search query from the request body
+    const { type, query } = req.body;
+  
+    try {
+      let cooks;
+  
+      switch (type) {
+        case 'cuisine':
+          // Find the menu category that matches the cuisine query
+          const cuisine = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${query.toString()}$`, 'i') } });
+          if (!cuisine) {
+            // Return an empty response if the cuisine is not found
+            return res.json({ cooks: [] });
+          }
+          // Find all cooks with the matching cuisine
+          cooks = await Cook.find({ specialties: cuisine._id });
+          console.log('Found cooks by cuisine:', cooks); // log the found cooks
+          break;
+        case 'dish':
+          // Find all cooks with a dish that matches the dish query
+          cooks = await Cook.find({ 'dishes.dish': { $regex: new RegExp(`${query.toString()}`, 'i') } });
+          console.log('Found cooks by dish:', cooks); // log the found cooks
+          break;
+        case 'both':
+          // Find all cooks with a dish or cuisine that matches the search query
+          cooks = await Cook.find({
+            $or: [
+              { 'specialties': { $in: await MenuCategorySchema.find({category_name: {$regex: new RegExp(`${query}`, 'i')}}).select('_id') } },
+              { 'dishes.dish': { $regex: new RegExp(`${query}`, 'i') } }
+            ]
+          });
+          console.log('Found cooks by both:', cooks); // log the found cooks
+          break;
+      }
+  
+      // If no cooks were found, return an empty array
+      if (!cooks.length) {
+        return res.json({ cooks: [] });
+      }
+  
+      // Return the found cooks
+      res.json({ cooks });
+    } catch (err) {
+      console.log(err, 'filter Controller error');
+      // Return an error message if there is an error
+      res.status(500).json({
+        errorMessage: 'Please try again later',
+      });
+    }
+  });
+  
+
+
+
+
+// router.post('/searchcooks', async (req, res) => {
+//   // Get the type (cuisine, dish, or both) and search query from the request body
+//   const { type, query } = req.body;
+
+//   try {
+//     let cooks;
+
+//     switch (type) {
+//       case 'cuisine':
+//         // Find the menu category that matches the cuisine query
+//         const cuisine = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${query.toString()}$`, 'i') } });
+//         if (!cuisine) {
+//           // Return an empty response if the cuisine is not found
+//           return res.json({ cooks: [] });
+//         }
+//         // Find all cooks with the matching cuisine
+//         cooks = await Cook.find({ specialties: cuisine._id });
+//         console.log('Found cooks by cuisine:', cooks); // log the found cooks
+//         break;
+//       case 'dish':
+//         // Find all cooks with a dish that matches the dish query
+//         cooks = await Cook.find({ 'dishes.dish': { $regex: new RegExp(`${query.toString()}`, 'i') } });
+//         console.log('Found cooks by dish:', cooks); // log the found cooks
+//         break;
+//       case 'both':
+//         // Find all cooks with a dish or cuisine that matches the search query
+//         cooks = await Cook.find({
+//           $or: [
+//             { 'specialties': { $in: await MenuCategorySchema.find({category_name: {$regex: new RegExp(`${query}`, 'i')}}).select('_id') } },
+//             { 'dishes.dish': { $regex: new RegExp(`${query}`, 'i') } }
+//           ]
+//         });
+//         console.log('Found cooks by both:', cooks); // log the found cooks
+//         break;
+//     }
+
+//     // If no cooks were found, return an empty array
+//     if (!cooks.length) {
+//       return res.json({ cooks: [] });
+//     }
+
+//     // Return the found cooks
+//     res.json({ cooks });
+//   } catch (err) {
+//     console.log(err, 'filter Controller error');
+//     // Return an error message if there is an error
+//     res.status(500).json({
+//       errorMessage: 'Please try again later',
+//     });
+//   }
+// });
+
+
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await MenuCategorySchema.find({});
+    res.status(200).json(categories);
+  } catch (err) {
+    console.log('Category ReadAll Error: ', err);
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+router.get('/filterByCategory', async (req, res) => {
   try {
     let cooks;
 
-    switch (type) {
-      case 'cuisine':
-        // Find the menu category that matches the cuisine query
-        const cuisine = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${query.toString()}$`, 'i') } });
-        if (!cuisine) {
-          // Return an empty response if the cuisine is not found
-          return res.json({ cooks: [] });
-        }
-        // Find all cooks with the matching cuisine
-        cooks = await Cook.find({ specialties: cuisine._id });
-        console.log('Found cooks by cuisine:', cooks); // log the found cooks
-        break;
-      case 'dish':
-        // Find all cooks with a dish that matches the dish query
-        cooks = await Cook.find({ 'dishes.dish': { $regex: new RegExp(`${query.toString()}`, 'i') } });
-        console.log('Found cooks by dish:', cooks); // log the found cooks
-        break;
-      case 'both':
-        // Find all cooks with a dish or cuisine that matches the search query
-        cooks = await Cook.find({
-          $or: [
-            { 'specialties': { $in: await MenuCategorySchema.find({category_name: {$regex: new RegExp(`${query}`, 'i')}}).select('_id') } },
-            { 'dishes.dish': { $regex: new RegExp(`${query}`, 'i') } }
-          ]
-        });
-        console.log('Found cooks by both:', cooks); // log the found cooks
-        break;
+    // Get the category from the query parameters
+    const category = req.query.category;
+
+    // If category is specified in the query parameters, filter by category
+    if (category) {
+      // Find the menu category that matches the category query
+      const menuCategory = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${category.toString()}$`, 'i') } });
+
+      // If the category is not found, return an empty response
+      if (!menuCategory) {
+        return res.json({ cooks: [] });
+      }
+
+      // Find all cooks with the matching category
+      cooks = await Cook.find({ menu_categories: menuCategory._id });
+      console.log('Found cooks by category:', cooks); // log the found cooks
+    } else {
+      // If category is not specified, return all cooks
+      cooks = await Cook.find({});
+      console.log('Found all cooks:', cooks); // log all found cooks
     }
 
     // If no cooks were found, return an empty array
@@ -844,6 +1080,181 @@ router.post('/searchcooks', async (req, res) => {
     });
   }
 });
+
+
+
+
+// GET all cooks filtered by category
+router.get('/getfiltercooks', async (req, res) => {
+  try {
+    const { category } = req.query;
+    let query = {};
+    if (category) {
+      query = { specialties: mongoose.Types.ObjectId(category) };
+    }
+    const cooks = await CookSchema.find(query).populate('specialties', 'category_name');
+    res.json({ cooks });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+router.get('/cooks', async (req, res) => {
+  try {
+    let cooks;
+
+    // Get the category from the query parameters
+    const category = req.query.category;
+
+    // If category is specified in the query parameters, filter by category
+    if (category) {
+      // Find the menu category that matches the category query
+      const menuCategory = await MenuCategorySchema.findOne({ category_name: { $regex: new RegExp(`^${category.toString()}$`, 'i') } });
+
+      // If the category is not found, return an empty response
+      if (!menuCategory) {
+        return res.json({ cooks: [] });
+      }
+
+      // Find all cooks with the matching category
+      cooks = await Cook.find({ specialties: menuCategory._id });
+      console.log('Found cooks by category:', cooks); // log the found cooks
+    } else {
+      // If category is not specified, return all cooks
+      cooks = await Cook.find({});
+      console.log('Found all cooks:', cooks); // log all found cooks
+    }
+
+    // If no cooks were found, return an empty array
+    if (!cooks.length) {
+      return res.json({ cooks: [] });
+    }
+
+    // Return the found cooks
+    res.json({ cooks });
+  } catch (err) {
+    console.log(err, 'filter Controller error');
+    // Return an error message if there is an error
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+
+
+
+router.get('/menuitems', async (req, res) => {
+  try {
+    const cookId = req.session.cook._id; // Retrieve the cook ID from the session
+    const menuItems = await MenuItemSchema.find({ cook: cookId }).populate('category'); // Find all menu items for the logged-in cook and populate the 'category' field
+    res.json({ status: 'SUCCESS', menuItems: menuItems });
+  } catch (error) {
+    console.error('Error retrieving menu items', error);
+    res.json({ status: 'ERROR', message: 'Error retrieving menu items' });
+  }
+});
+
+
+
+
+
+
+
+
+router.get('/cooksByCategory', async (req, res) => {
+  const { category } = req.query;
+  try {
+    const cooks = await Cook.find({ specialties: category });
+    res.json({ cooks });
+  } catch (error) {
+    console.error("Error filtering cooks by category:", error);
+    res.status(500).json({
+      errorMessage: 'Please try again later',
+    });
+  }
+});
+
+
+router.post('/filtercooks', async (req, res) => {
+  try {
+    let cooks;
+    const { category_name } = req.body;
+    const category = await MenuCategorySchema.findOne({ category_name });
+    if (!category) { // handle case where category is not found
+      return res.status(404).json({ status: 'ERROR', message: 'Category not found' });
+    }
+    cooks = await Cook.find({ specialties: category._id });
+    console.log('Found cooks by cuisine:', cooks); // log the found cooks
+    res.status(200).json({ status: 'SUCCESS', cooks });
+  } catch (error) {
+    console.error('Error filtering cooks', error);
+    res.status(500).json({ status: 'ERROR', message: 'Error filtering cooks' });
+  }
+});
+
+
+
+
+
+
+
+router.post('/dishy', upload.single('imageurls'), async (req, res) => {
+   
+  const cook = req.session.cook;
+
+  if (!cook) {
+    return res.json({
+      status: 'FAILED',
+      message: 'Not authorized to add menu items',
+    });
+  }
+
+  console.log('Request body:', req.body);
+  const { dish, dish_description, price, category } = req.body;
+  console.log('New Dish: ', req.body)
+  try {
+
+    let newDish = new MenuItemSchema({
+      cook_id: cook._id,
+      dish: dish,
+      dish_description: dish_description,
+      price: price,
+      category: category,
+      imageurls: req.file ? req.file.path : null,
+    })
+    // dish.cook_id = cook._id;
+    await newDish.save();
+
+    // Find the cook and add the dish to their dishes array
+    const updatedCook = await Cook.findByIdAndUpdate(
+      cook._id,
+      { $push: { dishes: newDish } },
+      { new: true }
+    );
+
+    res.json({
+      status: 'SUCCESS',
+      message: 'Menu item added successfully',
+      updatedCook: updatedCook,
+    });
+  } catch (err) {
+    res.json({
+      status: 'FAILED',
+      message: 'Error adding menu item',
+      error: err,
+    });
+  }
+});
+
+
+
+
 
 module.exports = router;
 // router.post('cooklogout', (req, res) => {

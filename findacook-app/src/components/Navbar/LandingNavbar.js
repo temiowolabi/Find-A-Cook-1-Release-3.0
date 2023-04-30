@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import '../CSS/Style.css'
 import { useRef } from "react";
 import { FaSearch, FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
@@ -62,6 +62,37 @@ const LandingNavbar  = () => {
       handleModalClose();
     };
 
+    // function handleNavigationClick(event) {
+    //   event.preventDefault();
+  
+    //   const targetId = event.target.hash;
+    //   const targetElement = document.querySelector(targetId);
+  
+    //   if (targetElement) {
+    //     targetElement.scrollIntoView({ behavior: 'smooth' });
+    //   } else if (window.location.pathname !== '/') {
+    //     navigate(`/?scrollTo=${targetId}`);
+    //   }
+    // }
+
+    // useEffect(() => {
+    //   const targetId = window.location.hash;
+    //   const targetElement = document.querySelector(targetId);
+  
+    //   if (targetElement) {
+    //     targetElement.scrollIntoView({ behavior: 'smooth' });
+    //   } else if (window.location.search === '?scrollTo=' + targetId) {
+    //     const timeoutId = setTimeout(() => {
+    //       const newTargetElement = document.querySelector(targetId);
+    //       if (newTargetElement) {
+    //         newTargetElement.scrollIntoView({ behavior: 'smooth' });
+    //       }
+    //     }, 500);
+
+    //     return () => clearTimeout(timeoutId);
+    //   }
+    // }, []);
+
 	return (
 		<>
 
@@ -72,11 +103,11 @@ const LandingNavbar  = () => {
             <img src="../images/logo-new-edit-01.png" className='navLogo'/>
             </a>
             <ul class="login-nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">About Us</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">FAQ</a></li>
-      <li><a href="#">Contact Us</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="#aboutSection">About Us</a></li>
+      <li><a href="#serviceSection">Services</a></li>
+      <li><a href="/faq">FAQ</a></li>
+      <li><a href="/contactus">Contact Us</a></li>
       <li><button className="navbar-login-btn" onClick={handleLoginClick}>Log In</button></li>
     </ul>
             </div>

@@ -23,7 +23,13 @@ import VerifyPage from './VerifyPage';
 import CookDashboard from './CookDashboard';
 import TermsPage from './TermsPage';
 import CookProfile from './CookProfile';
+<<<<<<< HEAD:findacook-app/src/App.js
 
+=======
+import ViewCooks from './ViewCooks';
+import FAQ from './FAQ';
+import Contact from './Contact';
+>>>>>>> booking:main/findacook-app/src/App.js
 
 
 import VerificationPage from './VerificationPage';
@@ -91,7 +97,7 @@ function App() {
       <Route path="/categories" element={<CategoriesPage />} />
       <Route path="/bookings" element={<ViewBookingsPage />} />
       <Route path="/cook" element={<BookingPage />} />
-      <Route path="/cook/:cookId/:bookingDate" element={<BookingPage/>} />
+      <Route path="/cook/:cookId" element={<BookingPage/>} />
       {/* <Route path="/edit/category/:categoryId" element={<EditCategory />} />
       <Route path="/category/:categoryId" element={<CategoryPage/>} /> */}
       <Route path="/reviewcook" element={<ReviewCook />} />
@@ -100,6 +106,8 @@ function App() {
       <Route path="/julianmenu" element={<JulianMenu />} />
       <Route path="/mortmenu" element={<MortMenu />} />
       <Route path="/addmenu" element={<AddMenu />} />
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="/contactus" element={<Contact />} />
   </Routes>
     </div>
   );

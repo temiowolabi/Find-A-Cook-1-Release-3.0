@@ -49,7 +49,7 @@ const Sidebar = () => {
                     <i class="uil uil-signout"></i>
                     <span class="link-name">Settings</span>
                 </a></li>
-                <li><a href="/documents">
+                <li><a href="/complete-form">
                     <i class="uil uil-signout"></i>
                     <span class="link-name">Documents</span>
                 </a></li>

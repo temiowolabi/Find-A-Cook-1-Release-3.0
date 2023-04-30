@@ -24,19 +24,19 @@ async function postImage({documents, description}) {
 
 
 const CookDashboard = () => {
-  const navigate = useNavigate();
-	const { cookId } = useParams();
-	console.log('', cookId)
+  // const navigate = useNavigate();
+	// const { cookId } = useParams();
+	// console.log('', cookId)
 	
-	const dispatch = useDispatch(); 
+	// const dispatch = useDispatch(); 
 
 
-	useEffect(() => {
-		dispatch(getCook(cookId));
-	}, [dispatch, cookId]);
+	// useEffect(() => {
+	// 	dispatch(getCook(cookId));
+	// }, [dispatch, cookId]);
 
-	const { cook } = useSelector(state => state.cooks);
-  console.log(cook);
+	// const { cook } = useSelector(state => state.cooks);
+  // console.log(cook);
 
   const [documentDescription, setDocumentDescription] = useState("")
   const [documents, setDocuments] = useState([]);
@@ -132,7 +132,7 @@ const CookDashboard = () => {
 
 
 
-     <div className="personal-form-body">
+     {/* <div className="personal-form-body">
         <main className="personal-form-container">
         <section className="personal-form-section">
           <h2>Personal Information</h2>
@@ -146,7 +146,7 @@ const CookDashboard = () => {
       </form>
         </section>
         </main>
-      </div>
+      </div> */}
 
 </>
     );

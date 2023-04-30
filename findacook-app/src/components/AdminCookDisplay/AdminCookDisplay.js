@@ -71,6 +71,7 @@ const AdminCookDisplay = () => {
     <>
       <div className="container">
         <main>
+          <h3>Manage Cooks</h3>
           <table className="adminCookDisplay">
             <thead>
               <tr>
@@ -90,13 +91,14 @@ const AdminCookDisplay = () => {
                     {cook.application_status === "pending" && (
                       <>
                         <button
+                        className="accept-btn"
                           onClick={() =>
                             updateApplicationStatus(cook._id, "approved")
                           }
                         >
                           Approve
                         </button>
-						<button onClick={() => showDeclineMessage(cook)}>Decline</button>
+						<button className="decline-btn" onClick={() => showDeclineMessage(cook)}>Decline</button>
                         {/* <button
                           onClick={() =>
                             updateApplicationStatus(cook._id, "declined")
@@ -130,12 +132,14 @@ const AdminCookDisplay = () => {
   </Modal.Body>
   <Modal.Footer>
     <div className="">
-      <Button variant="secondary" onClick={closeDeclineMessage}>
-        Close
-      </Button>
-	  <Button variant="danger" onClick={() => declineCook(selectedCook._id)}>
+
+	  <button className="decline-btn" onClick={() => declineCook(selectedCook._id)}>
   Decline
-</Button>
+</button>
+
+<button className="close-btn" variant="secondary" onClick={closeDeclineMessage}>
+        Close
+      </button>
 
     </div>
   </Modal.Footer>

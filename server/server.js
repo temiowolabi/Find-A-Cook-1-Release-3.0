@@ -132,10 +132,11 @@ app.use(session({
     }
 }))
 
-
+app.use(express.json());
 app.use('/user', UserRouter)
 app.use('/cook', CookRouter)
 app.use('/schedule', ScheduleRouter)
+app.use('/uploads', express.static('uploads'));
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

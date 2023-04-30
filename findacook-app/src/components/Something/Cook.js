@@ -15,7 +15,19 @@ const Cook = ({ cook, bookingDate }) => {
     return(
         <>
 
-          <div className="card__details">
+<div className="restaurant-list">
+
+        <div className="restaurant">
+          <img src="../images/cook1.jpg" alt="User Profile Picture" className="restaurant-image" />
+          <div className="restaurant-details">
+            <h2 className="restaurant-name">{cook.cook_first_name}</h2>
+            <p className="restaurant-description">{cook.description}</p>
+            <p className="restaurant-address">{cook.specialties}</p>
+          </div>
+        </div>
+
+    </div>
+          {/* <div className="card__details">
             
         <h3>{cook.cook_first_name}</h3>
         <img src="../images/cook1.jpg" alt="User Profile Picture" className='cookImg' />
@@ -37,7 +49,7 @@ const Cook = ({ cook, bookingDate }) => {
       </div>
 </div>
 </div>
-      </div>
+      </div> */}
 
 
     <Modal show={show} onHide={handleClose}>

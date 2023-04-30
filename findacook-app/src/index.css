@@ -1703,3 +1703,246 @@ margin-top: 5em;
   .cook-img-container img{
     width:300px;
   }
+
+
+
+
+
+/* Accordion styling */
+.accordion {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.accordion-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.accordion-header {
+  background-color: #eee;
+  padding: 10px 20px;
+  margin: 0;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.accordion-content {
+  padding: 20px;
+  display: none;
+  background-color: #fff;
+}
+
+/* Show content when header is clicked */
+.accordion-item.active .accordion-content {
+  display: block;
+}
+
+/* Add icon to header when active */
+.accordion-item.active .accordion-header::before {
+  content: '\25BC';
+  display: inline-block;
+  margin-right: 10px;
+  transform: rotate(180deg);
+}
+
+/* Add icon to header when inactive */
+.accordion-header::before {
+  content: '\25B6';
+  display: inline-block;
+  margin-right: 10px;
+}
+
+/* Show content when header is clicked and hide inactive content */
+.accordion-item.active .accordion-content {
+  display: block;
+}
+
+.accordion-item:not(.active) .accordion-content {
+  display: none;
+}
+
+
+.faqH1{
+
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 20px 0;
+    text-align: center;
+
+}
+
+
+
+
+
+.contact-form-contrainer input::-webkit-input-placeholder, .contact-form-contrainer textarea::-webkit-input-placeholder {
+  color: #aca49c;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:focus::-webkit-input-placeholder, .contact-form-contrainertextarea:focus::-webkit-input-placeholder {
+  color: #bbb5af;
+}
+
+.contact-form-contrainer input::-moz-placeholder, .contact-form-contrainer textarea::-moz-placeholder {
+  color: #aca49c;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:focus::-moz-placeholder, .contact-form-contrainer textarea:focus::-moz-placeholder {
+  color: #bbb5af;
+}
+
+.contact-form-contrainer input::placeholder, .contact-form-contrainer textarea::placeholder {
+  color: #aca49c;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:focus::placeholder, .contact-form-contrainer textarea::focus:placeholder {
+  color: #bbb5af;
+}
+
+.contact-form-contrainer input::-ms-placeholder, .contact-form-contrainer textarea::-ms-placeholder {
+  color: #aca49c;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:focus::-ms-placeholder, .contact-form-contrainer textarea:focus::-ms-placeholder {
+  color: #bbb5af;
+}
+
+/* on hover placeholder */
+
+.contact-form-contrainer input:hover::-webkit-input-placeholder, .contact-form-contrainer textarea:hover::-webkit-input-placeholder {
+  color: #e2dedb;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:hover:focus::-webkit-input-placeholder, .contact-form-contrainer textarea:hover:focus::-webkit-input-placeholder {
+  color: #cbc6c1;
+}
+
+.contact-form-contrainer input:hover::-moz-placeholder, .contact-form-contrainer textarea:hover::-moz-placeholder {
+  color: #e2dedb;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:hover:focus::-moz-placeholder, .contact-form-contrainer textarea:hover:focus::-moz-placeholder {
+  color: #cbc6c1;
+}
+
+.contact-form-contrainer input:hover::placeholder, .contact-form-contrainer textarea:hover::placeholder {
+  color: #e2dedb;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:hover:focus::placeholder, .contact-form-contrainer textarea:hover:focus::placeholder {
+  color: #cbc6c1;
+}
+
+.contact-form-contrainer input:hover::placeholder, .contact-form-contrainer textarea:hover::placeholder {
+  color: #e2dedb;
+  font-size: 0.875em;
+}
+
+.contact-form-contrainer input:hover:focus::-ms-placeholder, .contact-form-contrainer textarea:hover::focus:-ms-placeholder {
+  color: #cbc6c1;
+}
+
+
+
+.contact-form-contrainer h3 {
+  position: relative;
+  margin: 100px 0 25px 0;
+  font-size: 2.3em;
+  text-align: center;
+  letter-spacing: 7px;
+}
+
+#form {
+  position: relative;
+  width: 500px;
+  margin: 50px auto 100px auto;
+}
+
+.contact-form-contrainer input {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.875em;
+  width: 470px;
+  height: 50px;
+  padding: 0px 15px 0px 15px;
+  
+  background: transparent;
+  outline: none;
+  color: #726659;
+  
+  border: solid 1px #b3aca7;
+  border-bottom: none;
+  
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+}
+
+.contact-form-contrainer input:hover {
+  background: #b3aca7;
+  color: #e2dedb;
+}
+
+.contact-form-contrainer textarea {
+  width: 470px;
+  max-width: 470px;
+  height: 110px;
+  max-height: 110px;
+  padding: 15px;
+  
+  background: transparent;
+  outline: none;
+  
+  color: #726659;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.875em;
+  
+  border: solid 1px #b3aca7;
+  
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+}
+
+.contact-form-contrainer textarea:hover {
+  background: #8CBE46;
+  color: #e2dedb;
+}
+
+#submit {
+  width: 470px;
+  
+  padding: 0;
+  margin: -5px 0px 0px 0px;
+  
+  font-family: 'Lato', sans-serif;
+  font-size: 0.875em;
+  color: #b3aca7;
+  
+  outline:none;
+  cursor: pointer;
+  
+  border: solid 1px #b3aca7;
+  border-top: none;
+}
+
+#submit:hover {
+  color: #e2dedb;
+}
+
+
+
+
+
+
+
