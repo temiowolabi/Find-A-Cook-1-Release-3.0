@@ -103,7 +103,7 @@ const LandingNavbar  = () => {
             <img src="../images/logo-new-edit-01.png" className='navLogo'/>
             </a>
             <ul class="login-nav-links">
-      <li><a href="/">Home</a></li>
+      <li><Link to="/">Home</Link></li>
       <li><a href="#aboutSection">About Us</a></li>
       <li><a href="#serviceSection">Services</a></li>
       <li><a href="/faq">FAQ</a></li>
