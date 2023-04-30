@@ -16,7 +16,7 @@ function AddMenuItem() {
   useEffect(() => {
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('https://findacook-backend.onrender.com/cook/menucategories');
+            const response = await axios.get('http://localhost:5001/cook/menucategories');
             if (response.data.status === 'SUCCESS') {
                 setCategories(response.data.menuCategories);
             } else {
@@ -69,12 +69,7 @@ function AddMenuItem() {
                 'Content-Type': 'multipart/form-data',
             },
         };
-<<<<<<< HEAD:findacook-app/src/components/cooks/AddCookItem.js
-      await axios.post('https://findacook-backend.onrender.com/cook/addmenuitem', formData, config);
-=======
-      console.log('Form data:', formData);
-      await axios.post('http://localhost:5001/cook/dishy', formData, config);
->>>>>>> booking:main/findacook-app/src/components/cooks/AddCookItem.js
+      await axios.post('http://localhost:5001/cook/addmenuitem', formData, config);
       alert('Menu item added successfully');
       setForm({
         dish: '',
