@@ -23,13 +23,9 @@ import VerifyPage from './VerifyPage';
 import CookDashboard from './CookDashboard';
 import TermsPage from './TermsPage';
 import CookProfile from './CookProfile';
-<<<<<<< HEAD:findacook-app/src/App.js
-
-=======
 import ViewCooks from './ViewCooks';
 import FAQ from './FAQ';
 import Contact from './Contact';
->>>>>>> booking:main/findacook-app/src/App.js
 
 
 import VerificationPage from './VerificationPage';
