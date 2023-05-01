@@ -42,7 +42,6 @@ import ViewBookingsPage from './ViewBookingsPage';
 import BookingPage from './BookingPage';
 
 import ReviewCook from './ReviewCook';
-import JoaneMenu from './JoaneMenu';
 import MauriceMenu from './MauriceMenu';
 import JulianMenu from './JulianMenu';
 import MortMenu from './MortMenu';
@@ -94,7 +93,6 @@ function App() {
       {/* <Route path="/edit/category/:categoryId" element={<EditCategory />} />
       <Route path="/category/:categoryId" element={<CategoryPage/>} /> */}
       <Route path="/reviewcook" element={<ReviewCook />} />
-      <Route path="/joanemenu" element={<JoaneMenu />} />
       <Route path="/mauricemenu" element={<MauriceMenu />} />
       <Route path="/julianmenu" element={<JulianMenu />} />
       <Route path="/mortmenu" element={<MortMenu />} />
