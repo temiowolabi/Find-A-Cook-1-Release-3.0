@@ -6,6 +6,7 @@ const stripe = require('stripe')('sk_test_51MYbfMDYuzoeBKxGcMhrNfA5j9wjsN4QqBDDo
 //const cookieParser = require('cookie-parser');
 const session = require("express-session");
 
+
 // const path = require('path')
 // // Serve static files from the React frontend app
 // app.use('/static', express.static(path.join(__dirname, '../../main/findacook-app/build')))
@@ -23,15 +24,13 @@ require('./config/db')
 const UserRouter = require('./api/User');
 const CookRouter = require('./api/Cook');
 const ScheduleRouter = require('./api/Schedule');
+const bookingRoutes = require('./api/Booking');
 
 
 const bodyParser = require('express').json;
 app.use(bodyParser());
 app.use(cors({
-    origin: [
-        // "http://localhost:3000"
-        "https://findacook.onrender.com"
-    ],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
@@ -137,6 +136,7 @@ app.use('/user', UserRouter)
 app.use('/cook', CookRouter)
 app.use('/schedule', ScheduleRouter)
 app.use('/uploads', express.static('uploads'));
+app.use('/booking', bookingRoutes)
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

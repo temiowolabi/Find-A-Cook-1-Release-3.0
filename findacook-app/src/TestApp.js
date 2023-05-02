@@ -4,6 +4,7 @@ import EditProfile from "./components/cooks/EditProfile";
 import AddMenuItem from "./components/cooks/AddCookItem";
 import Topbar from "./components/Topbar";
 import Sidebar from "./components/Sidebar";
+import EditProfileForm from "./components/cooks/EditProfile";
 
 function TestApp() {
 
@@ -12,6 +13,7 @@ function TestApp() {
 
             <Topbar />
             <Sidebar />
+            <EditProfileForm />
 
             {/* <EditProfile /> */}
 
@@ -20,7 +22,7 @@ function TestApp() {
             {/* Other components */}
             {/* <CookList /> */}
    
-            <AddMenuItem />
+            {/* <AddMenuItem /> */}
 
         </div>
       );

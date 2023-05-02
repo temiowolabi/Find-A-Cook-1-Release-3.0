@@ -13,7 +13,7 @@ import ProductPage from './ProductPage';
 import SampleAdminDashboard from './SampleAdminDashboard';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { commerce } from './lib/commerce';
+
 import { useDispatch } from 'react-redux'
 import { getCategories } from './redux/actions/categoryActions';
 import Shipping from './Shipping';
@@ -21,9 +21,9 @@ import EditProduct from './components/Admin/EditProduct';
 import Home from './Home';
 import CookDashboard from './CookDashboard';
 import TermsPage from './TermsPage';
-import CookProfile from './CookProfile';
 import FAQ from './FAQ';
 import Contact from './Contact';
+import CookProfile from './components/cooks/CookProfile';
 
 
 import VerificationPage from './VerificationPage';
@@ -73,7 +73,6 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/cookdashboard" element={<CookDashboard />} />
       <Route path="/terms" element={<TermsPage />} />
-      <Route path="/profile" element={<CookProfile />} />
       <Route path="/verificationpage" element={<VerificationPage/>} />
       <Route path="/cooklogin" element={<CookLoginPage />} />
       <Route path="/cookregistration" element={<CookRegPage />} />
@@ -99,6 +98,7 @@ function App() {
       <Route path="/addmenu" element={<AddMenu />} />
       <Route path="/faq" element={<FAQ />} />
       <Route path="/contactus" element={<Contact />} />
+      <Route path="/cook-profile/:cookId" element={<CookProfile />} />
   </Routes>
     </div>
   );

@@ -285,19 +285,30 @@ router.get("/cookinfo", (req, res) => {
 });
 
 router.get("/allcooks", async (req, res) => {
-    try {
-      const cooks = await Cook.find({}, { cook_first_name: 1, cook_last_name: 1, profile_picture: 1, application_status: 1, cook_bio: 1, description: 1, _id: 1,specialties: 1 });
+  try {
+    const cooks = await Cook.find({});
+    res.status(200).json({cooks});
+  } catch (error) {
+    console.error('Error fetching cooks:', error);
+    res.status(500).json({message: 'There was an Error fetching cooks', error});
+    };
+});
+
+  router.get('/cook/:cookId', async (req, res) => {
+    const cookId = req.params.cookId;
+    console.log('Requested cook ID:', cookId); // Add this line to log the cookId
   
-      res.json({
-        status: "SUCCESS",
-        cooks: cooks,
-      });
+    try {
+      const cook = await Cook.findById(cookId);
+      console.log('Found cook:', cook); // Add this line to log the cook object
+      if (!cook) {
+        res.status(404).json({ status: 'FAILED', message: 'Cook not found' });
+      } else {
+        res.json({ status: 'SUCCESS', cook });
+      }
     } catch (err) {
-      res.json({
-        status: "FAILED",
-        message: "Error retrieving cooks",
-        error: err,
-      });
+      console.error('Error fetching cook by ID:', err);
+      res.status(500).json({ status: 'FAILED', message: 'Error fetching cook by ID' });
     }
   });
   
@@ -309,6 +320,17 @@ router.get("/allcooks", async (req, res) => {
     } catch (err) {
       res.json({ status: 'FAILED', message: 'Error retrieving menu categories' });
       console.log(err);
+    }
+  });
+
+  router.get("/menu/cook/:cookId", async (req, res) => {
+    try {
+      const { cookId } = req.params;
+      const menuItems = await MenuItemSchema.find({ cook_id: cookId });
+      res.status(200).json({ menuItems });
+    } catch (error) {
+      console.error("Error fetching menu items for cook ID:", cookId, "Error:", error);
+      res.status(500).json({ message: "Error fetching menu items" });
     }
   });
 

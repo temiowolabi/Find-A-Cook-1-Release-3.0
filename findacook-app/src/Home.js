@@ -2,6 +2,8 @@ import Homepage from './components/Homepage'
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar/Navbar';
+import CookList from './components/cooks/CookList';
+import Cook from './components/Something/Cook';
 
 const Home = () => {
     const [firstname, setFirstName] = useState("")
@@ -24,7 +26,9 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Homepage />
+      <h2>Welcome {firstname}</h2>
+      <CookList />
+      {/* <Homepage /> */}
       {/* <div className="container">
         <h1>Welcome to Find A Cook {firstname}</h1>
 
