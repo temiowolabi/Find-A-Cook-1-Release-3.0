@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Cook from './Something/Cook'
-import './Something/Cook.css'
+import Cook from './CookDashboard/Cook'
+import './CookDashboard/Cook.css'
 import { DatePicker } from 'antd';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 
@@ -113,7 +114,7 @@ const Homepage = () => {
     <>
       <div>
         <nav className="">
-          <DatePicker format={'DD-MM-YYYY'} onChange={filterByDate} />
+          {/* <DatePicker format={'DD-MM-YYYY'} onChange={filterByDate} /> */}
           <form className="search-container" onSubmit={handleSearch}>
             <input
               id="search"
@@ -164,7 +165,9 @@ const Homepage = () => {
   </div>
 
     <div className="restaurant-details">
-      <h2 className="restaurant-name">{cook.cook_first_name}</h2>
+    <Link to={`/cook/${cook._id}`}>
+    <h2 className="restaurant-name">{cook.cook_first_name}</h2>
+        </Link>
       <p className="cuisine-type">{cook.specialties}</p>
       <p className="rating">⭐ {Math.floor(Math.random() * 5) + 1} / 5 ({Math.floor(Math.random() * 100)})</p>
     </div>
