@@ -13,53 +13,56 @@ let transporter = nodemailer.createTransport({
 });
 
 router.post('/create', async (req, res) => {
-    try {
-      const { cook_id, date, menuItems, totalPrice } = req.body;
-        
-      const newBooking = new Booking({
-        user: req.session.user._id,
-        cook: cook_id,
-        date,
-        menuItems: menuItems.map(item => item._id),
-        totalPrice,
-      });
+  try {
+    const { cook_id, date, menuItems, num_people } = req.body;
 
-      const mailOptionsUser = {
-        from: process.env.AUTH_EMAIL,
-        to: req.session.user.user_email,
-        subject: "Booking Confirmation",
-        html: `<p>Hello ${req.session.user.user_first_name}this is a receipt of your booking, it is at ${date} and the total price was ${totalPrice}</p>`,
+    const totalPrice = menuItems.reduce((total, item) => total + item.price, 0) * num_people;
+
+    const newBooking = new Booking({
+      user: req.session.user._id,
+      cook: cook_id,
+      date,
+      num_people,
+      menuItems: menuItems.map(item => item._id),
+      totalPrice,
+    });
+
+    const mailOptionsUser = {
+      from: process.env.AUTH_EMAIL,
+      to: req.session.user.user_email,
+      subject: "Booking Confirmation",
+      html: `<p>Hello ${req.session.user.user_first_name}this is a receipt of your booking, it is at ${date} and the total price was ${totalPrice}</p>`,
     };
 
-  
-      await newBooking.save().then(() => {
-        transporter.sendMail(mailOptionsUser).then(() => {
-            res.json({
-                status: "Pending",
-                message: "Verification email sent",
-            })
-        }).catch((error) => {
-            console.log(error);
-            res.json({
-                status: "Failed",
-                message: "Verification email failed",
+    await newBooking.save().then(() => {
+      transporter.sendMail(mailOptionsUser).then(() => {
+          res.json({
+              status: "Pending",
+              message: "Verification email sent",
+          })
+      }).catch((error) => {
+          console.log(error);
+          res.json({
+              status: "Failed",
+              message: "Verification email failed",
 
-            })
-        })
-      });
-  
-      res.status(201).json({
-        message: 'Booking created successfully',
-        booking: newBooking,
-      });
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      res.status(500).json({
-        message: 'Error creating booking',
-        error,
-      });
-    }
-  });
+          })
+      })
+    });
+
+    res.status(201).json({
+      message: 'Booking created successfully',
+      booking: newBooking,
+    });
+  } catch (error) {
+    console.error('Error creating booking:', error);
+    res.status(500).json({
+      message: 'Error creating booking',
+      error,
+    });
+  }
+});
+
   
 
 router.get('/cook/:cookId', async (req, res) => {

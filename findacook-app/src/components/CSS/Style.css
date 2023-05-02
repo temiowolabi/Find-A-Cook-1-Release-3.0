@@ -1312,11 +1312,19 @@ label {
 	right: 0;
 	border: none;
 	padding: 10px 20px;
-	background-color: #1f3744;
+	background-color: #8CBE46;
 	color: white;
 	font-weight: bold;
 	border-radius: 5px;
 	cursor: pointer;
+  }
+
+  .react-datepicker-wrapper{
+	/* position: absolute; */
+	margin-top:75px;
+	right: 0;
+	margin-left: 59em;
+
   }
   
   .cookName {
@@ -1595,6 +1603,98 @@ label {
 
 
 
+  .menu-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 2rem;
+  }
+  
+  .menu-items {
+	flex: 1;
+  }
+  
+  .menu-items h2 {
+	font-size: 2rem;
+	margin-bottom: 1rem;
+  }
+  
+  .menu-item {
+	border: 1px solid #ccc;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	margin-bottom: 1rem;
+  }
+  
+  .menu-item h3 {
+	font-size: 1.5rem;
+	margin-bottom: 0.5rem;
+  }
+  
+  .menu-item p {
+	font-size: 1rem;
+	margin-bottom: 0.5rem;
+  }
+  
+  .menu-item button {
+	background-color: #8CBE46;
+	color: white;
+	border: none;
+	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: all 0.3s ease;
+  }
+  
+  .menu-item button:hover {
+	background-color: #3e8e41;
+  }
+  
+  .cart {
+	display: flex;
+	flex-direction: column;
+	background-color: #f9f9f9;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 1rem;
+  }
+  
+  .cart-title {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
+  }
+  
+  .cart-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
+  }
+  
+  .cart-item-name {
+	font-size: 1.2rem;
+  }
+  
+  .cart-item-price {
+	font-size: 1rem;
+	font-weight: bold;
+  }
+  
+  .cart-total {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 1rem;
+	font-size: 1.2rem;
+	font-weight: bold;
+  }
+  
+  .cart-total-label {
+	font-weight: normal;
+  }
+  
 
 
 

@@ -32,6 +32,9 @@ const bookingSchema = new mongoose.Schema({
   additionalInfo: {
     type: String,
   },
+  num_people:{
+    type: Number,
+  }
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

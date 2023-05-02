@@ -10,46 +10,30 @@ import BookingForm from './BookingForm';
 import moment from 'moment';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import axios from 'axios';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 
-const blockedDates = [
-  new Date(2023, 4, 5), // May 5th, 2022
-  new Date(2023, 5, 3), // June 3rd, 2022
-  new Date(2023, 5, 15), // June 15th, 2022
-  new Date(2023, 6, 21), // July 21st, 2022
-  new Date(2023, 7, 10), // August 10th, 2022
-];
 
-function isDateBlocked(date) {
-  return blockedDates.find((blockedDate) =>
-    date.getFullYear() === blockedDate.getFullYear() &&
-    date.getMonth() === blockedDate.getMonth() &&
-    date.getDate() === blockedDate.getDate()
-  );
-}
 
 const CustomerBooking = () => {
 	const [slideNumber, setSlideNumber] = useState(0);
 	const [open, setOpen] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
   const [show, setShow] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+ 
+  const [cook, setCook] = useState(null);
+  const [bookings, setBookings] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [cart, setCart] = useState([]);
+  const { cookId } = useParams();
+  const [numPeople, setNumPeople] = useState(1);
 
-  const [date, setDate] = useState(new Date());
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-  
 
-    function handleSelectDate(date) {
-      if (isDateBlocked(date)) {
-        return;
-      }
-      setSelectedDate(date);
-    }
-  
-    function tileDisabled({ date }) {
-      return isDateBlocked(date);
-    }
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
 	const handleOpen = (i) => {
 		setSlideNumber(i);
@@ -70,13 +54,8 @@ const CustomerBooking = () => {
 
 	  
   const navigate = useNavigate();
-	const { cookId, bookingDate } = useParams();
 	const dispatch = useDispatch(); 
 
-
-	useEffect(() => {
-		dispatch(getCook(cookId));
-	}, [dispatch, cookId]);
 
 	const handleClick = () => {
 
@@ -84,13 +63,56 @@ const CustomerBooking = () => {
 
 	  };
 
-	const { cook } = useSelector(state => state.cooks);
+    useEffect(() => {
+      const fetchCookAndBookings = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5001/cook/cook/${cookId}`);
+          const bookingResponse = await axios.get(`http://localhost:5001/booking/cook/${cookId}`);
+          const menuResponse = await axios.get(`http://localhost:5001/cook/menu/cook/${cookId}`);
+          setMenuItems(menuResponse.data.menuItems);
+          console.log('Response data:', response.data);
+          
+          setCook(response.data.cook);
+          setBookings(bookingResponse.data.bookings);
+        } catch (error) {
+          console.error('Error fetching cook data for cook ID:', cookId, 'Error:', error);
+        }
+      };
+  
+      fetchCookAndBookings();
+    }, [cookId]);
 
-  // const { roomid, bookingDate } = useParams();
-  const theDate = moment(bookingDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
 
+    const bookedDates = bookings.map(booking => new Date(booking.date));
 
-
+    const handleBooking = async () => {
+      try {
+          await axios.post('http://localhost:5001/booking/create', {
+              cook_id: cook,
+              date: selectedDate,
+              menuItems: cart,
+              num_people: numPeople,
+              totalPrice: cart.reduce((total, item) => total + item.price, 0) ,
+          });
+          setBookings([...bookings, {date: selectedDate }]);
+          alert('Booking created successfully');
+      } catch (error) {
+          console.error('Error creating booking:', error);
+      }
+    };
+  
+    const addToCart = (item) => {
+      setCart([...cart, item]);
+    };
+    const removeFromCart = (itemToRemove) => {
+      setCart(cart.filter((item) => item._id !== itemToRemove._id));
+    };
+    
+    
+  
+    if (!cook) {
+      return <div>Loading...</div>;
+    }
 
 
   
@@ -127,10 +149,29 @@ const CustomerBooking = () => {
           )}
 
 <div className="cookWrapper">
-<button className="bookNow" onClick={handleShow}>Book Now!</button>
+<DatePicker
+        selected={selectedDate}
+        onChange={date => setSelectedDate(date)}
+        excludeDates={bookedDates}
+        showTimeSelect
+        dateFormat="Pp"
+        placeholderText={'Please select a date'} 
+      />
+      
+      <input
+    type="number"
+    id="numPeople"
+    name="numPeople"
+    value={numPeople}
+    max={10}
+    onChange={(e) => setNumPeople(e.target.value)}
+  />
+
+
+      <button onClick={handleBooking} className='bookNow'>Book</button>
+      
  	  <div className="profile-picture">
- 		{/* <img src={`/uploads/${cook.profile_picture}`} alt="Profile Picture" /> */}
-    <img src="/images/cook1.jpg" />
+     <img src={cook.profile_picture} alt={`${cook.cook_first_name}'s profile`} />
  	  </div>
 <h1 className="cookName">{cook.cook_first_name} {cook.cook_last_name}</h1>
  		<div className="credentials">
@@ -140,16 +181,58 @@ const CustomerBooking = () => {
  		  </div>
  		<p>{cook.description}</p>
 
-     <ul>
+     {/* <ul>
         {cook.dishes && cook.dishes.map(dish => (
           <>
           <li key={dish._id}>{dish.dish}</li>
           <li key={dish._id}>  <img src={`/uploads/uploads/${dish.imageurls}`} alt="" /></li>
           </>
         ))}
-      </ul>
+      </ul> */}
 
-		 <div className="cookFoodImages">
+      <hr />
+
+      {/* <DatePicker
+        selected={selectedDate}
+        onChange={date => setSelectedDate(date)}
+        excludeDates={bookedDates}
+        showTimeSelect
+        dateFormat="Pp"
+      />
+
+      <button onClick={handleBooking} className='bookNow'>Book</button> */}
+      <div class="menu-container">
+
+  <div class="menu-items">
+    <h2>Menu Items</h2>
+    {menuItems.map((menuItem) => (
+      <div class="menu-item" key={menuItem._id}>
+        <h3>{menuItem.dish}</h3>
+        <p>{menuItem.dish_description}</p>
+        <p>€{menuItem.price.toFixed(2)}</p>
+        <button onClick={() => addToCart(menuItem)}>Add</button>
+        <button onClick={() => removeFromCart(menuItem)}>Remove</button>
+      </div>
+    ))}
+  </div>
+  <div class="cart">
+  <h2 class="cart-title">Your Order</h2>
+  {cart.map((item) => (
+    <div class="cart-item" key={item._id}>
+      <span class="cart-item-name">{item.dish}</span>
+      <span class="cart-item-price">€{item.price.toFixed(2)}</span>
+    </div>
+  ))}
+  <div class="cart-total">
+    <span class="cart-total-label">Total:</span>
+    <span class="cart-total-price">€{cart.reduce((total, item) => total + item.price, 0).toFixed(2) * numPeople}</span>
+  </div>
+</div>
+</div>
+
+
+
+		 {/* <div className="cookFoodImages">
                 <div className="cookFoodImgWrapper" >
                   <img
                     // onClick={() => setOpen(true)}
@@ -206,7 +289,7 @@ const CustomerBooking = () => {
 				  
                 </div>
     
-            </div>
+            </div> */}
 
 
 
@@ -229,23 +312,10 @@ const CustomerBooking = () => {
             {/* <Modal.Title>Select your menu items: </Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
-        <div className='booking-app'>
-      <h1 className='text-center'>Pick A Date</h1>
-      <div className='calendar-container'>
-        <Calendar         onChange={handleSelectDate}
-        value={selectedDate}
-        tileDisabled={tileDisabled} />
-      </div>
-      <p className='text-center'>
-        <span className='bold'>Selected Date:</span>{' '}
-        {date.toDateString()}
-      </p>
-    </div>
+
         </Modal.Body>
         <Modal.Footer>
-            <button className='modalButton' onClick={handleClose}>
-                Close
-            </button>
+
         </Modal.Footer>
     </Modal>
   

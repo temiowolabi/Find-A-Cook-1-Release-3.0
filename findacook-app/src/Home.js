@@ -27,8 +27,8 @@ const Home = () => {
     <>
       <Navbar />
       <h2>Welcome {firstname}</h2>
-      <CookList />
-      {/* <Homepage /> */}
+      {/* <CookList /> */}
+      <Homepage />
       {/* <div className="container">
         <h1>Welcome to Find A Cook {firstname}</h1>
 

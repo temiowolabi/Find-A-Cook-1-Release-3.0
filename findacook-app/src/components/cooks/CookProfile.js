@@ -80,7 +80,7 @@ const CookProfile = () => {
           <h3>{menuItem.dish}</h3>
           <p>{menuItem.dish_description}</p>
           <p>${menuItem.price.toFixed(2)}</p>
-          <button onClick={() => addToCart(menuItem)}>Add to cart</button>
+          <button onClick={() => addToCart(menuItem)}>Add to Booking</button>
         </div>
       ))}
 
