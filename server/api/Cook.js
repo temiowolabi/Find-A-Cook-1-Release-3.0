@@ -1240,6 +1240,18 @@ router.post('/dishy', upload.single('imageurls'), async (req, res) => {
   console.log('Request body:', req.body);
   const { dish, dish_description, price, category } = req.body;
   console.log('New Dish: ', req.body)
+
+  const product = await stripe.products.create({
+    name: dish,
+    type: 'good',
+  });
+
+  // Create a new price for the product in Stripe
+  const stripePrice = await stripe.prices.create({
+    product: product.id,
+    unit_amount: price * 100, // Stripe requires the price in cents
+    currency: 'eur',
+  });
   try {
 
     let newDish = new MenuItemSchema({
@@ -1249,6 +1261,8 @@ router.post('/dishy', upload.single('imageurls'), async (req, res) => {
       price: price,
       category: category,
       imageurls: req.file ? req.file.path : null,
+      stripe_product_id: product.id, // Save the product ID in your database
+      stripe_price_id: stripePrice.id, // Save the price ID in your database
     })
     // dish.cook_id = cook._id;
     await newDish.save();

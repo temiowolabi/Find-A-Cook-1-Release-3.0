@@ -49,13 +49,14 @@ function Navbar() {
             <img src="/images/logo-new-edit-01.png" className='navLogo'/>
             </a>
             <ul class="login-nav-links">
-      <li><a href="#">Discover Cooks</a></li>
+      <li><a href="/home">Discover Cooks</a></li>
       <li><a href="#">My Bookings</a></li>
-      <li><a href="#"><FaShoppingCart />{' '} ({cart.length})</a></li>
+      {/* <li><a href="#"><FaShoppingCart />{' '} ({cart.length})</a></li> */}
       {/* <li><a href="#">FAQ</a></li>
       <li><a href="#">Contact Us</a></li> */}
       {/* <li><a href="#">{firstname}</a></li> */}
-      <li><a href="#" class="login">Log Out</a></li>
+      {/* <li><a href="#" class="login">Log Out</a></li> */}
+      <LogoutButton/>
     </ul>
             </div>
 

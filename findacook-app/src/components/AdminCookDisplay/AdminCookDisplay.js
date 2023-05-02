@@ -26,7 +26,7 @@ const AdminCookDisplay = () => {
 
   const fetchCooks = async () => {
     try {
-      const response = await axios.get("https://findacook-backend.onrender.com/cook/allcooks");
+      const response = await axios.get("http://localhost:5001/cook/allcooks");
       setCooks(response.data.cooks);
     } catch (error) {
       console.error("Error fetching cooks:", error);
@@ -35,7 +35,7 @@ const AdminCookDisplay = () => {
 
   const updateApplicationStatus = async (cookId, status) => {
     try {
-      await axios.put(`https://findacook-backend.onrender.com/cook/${cookId}/applicationstatus`, {
+      await axios.put(`http://localhost:5001/cook/${cookId}/applicationstatus`, {
         application_status: status,
       });
       fetchCooks();
@@ -52,7 +52,7 @@ const AdminCookDisplay = () => {
 	}
 	try {
 	  await axios.put(
-		`https://findacook-backend.onrender.com/cook/${selectedCook._id}/applicationstatus`,
+		`http://localhost:5001/cook/${selectedCook._id}/applicationstatus`,
 		{
 		  application_status: "declined",
 		  reason_for_decline: declineMessage,
@@ -81,7 +81,7 @@ const AdminCookDisplay = () => {
               </tr>
             </thead>
             <tbody>
-              {cooks.map((cook, index) => (
+            {cooks.filter(cook => cook.application_status === "pending").map((cook, index) => (
                 <tr key={index}>
                   <td>
                     {cook.cook_first_name} {cook.cook_last_name}

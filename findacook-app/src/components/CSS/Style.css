@@ -1274,6 +1274,21 @@ label {
 	position: absolute;
 	z-index: 1;
   }
+  .tooltiptext2 {
+	visibility: hidden;
+	width: 100px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	opacity: 0.9;
+	font-size: 12px;
+  
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 1;
+  }
 
   .verifiedTooltip:hover .tooltiptext {
 	visibility: visible;
@@ -1326,6 +1341,11 @@ label {
 	margin-left: 59em;
 
   }
+
+  /* .numberPeople{
+	margin-left: 59em;
+	width: 3em;
+  } */
   
   .cookName {
 	font-size: 24px;
@@ -1636,7 +1656,7 @@ label {
 	margin-bottom: 0.5rem;
   }
   
-  .menu-item button {
+  /* .menu-item button {
 	background-color: #8CBE46;
 	color: white;
 	border: none;
@@ -1649,7 +1669,7 @@ label {
   
   .menu-item button:hover {
 	background-color: #3e8e41;
-  }
+  } */
   
   .cart {
 	display: flex;
@@ -1658,6 +1678,7 @@ label {
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	padding: 1rem;
+	width: 20em;
   }
   
   .cart-title {
@@ -1827,3 +1848,148 @@ label {
 .calendar-container{
 	margin-left: 4em;
 }
+
+
+
+
+.stepper{
+	margin-left: 59em;
+}
+
+.numberPeople {
+	width: 50px;
+	height: 30px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 5px 10px 5px 10px;
+	text-align: center;
+	font-size: 16px;
+	outline: none;
+	position: relative;
+  }
+
+  .numberPeople::-webkit-inner-spin-button,
+  .numberPeople::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+  }
+  
+  .numberPeople::-moz-inner-spin-button,
+  .numberPeople::-moz-outer-spin-button {
+	-moz-appearance: none;
+	margin: 0;
+  }
+  
+  .numberPeople:before {
+	content: '+';
+	position: absolute;
+	right: -30px; /* adjust this value as needed */
+	top: 0;
+	font-size: 20px;
+	cursor: pointer;
+  }
+  
+  .numberPeople:after {
+	content: '-';
+	position: absolute;
+	right: -10px; /* adjust this value as needed */
+	top: 0;
+	font-size: 20px;
+	cursor: pointer;
+  }
+  
+  
+  .numberPeople::-webkit-inner-spin-button,
+  .numberPeople::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+  }
+  
+  .numberPeople:invalid {
+	box-shadow: none;
+  }
+  
+  .numberPeople:focus {
+	border-color: #0077cc;
+	box-shadow: 0 0 5px rgba(0, 119, 204, 0.5);
+  }
+  
+  .numberPeople-group {
+	display: flex;
+	align-items: center;
+  }
+/*   
+  .numberPeople-btn {
+	background-color: #f7f7f7;
+	border: 1px solid #ccc;
+	color: #333;
+	height: 30px;
+	width: 30px;
+	font-size: 18px;
+	cursor: pointer;
+  }
+  
+  .numberPeople-btn:hover,
+  .numberPeople-btn:focus {
+	background-color: #e6e6e6;
+	outline: none;
+  }
+  
+  .numberPeople-btn:active {
+	transform: translateY(1px);
+  }
+  
+  .numberPeople-minus-btn {
+	border-radius: 4px 0 0 4px;
+  }
+  
+  .numberPeople-plus-btn {
+	border-radius: 0 4px 4px 0;
+  } */
+  
+
+  .stepper-btn {
+	font-size: 1rem;
+	line-height: 1.5;
+	padding: 2px ; 
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	background-color: #fff;
+	cursor: pointer;
+	transition: all 0.15s ease-in-out;
+  }
+  
+  .stepper-btn:hover {
+	color: #fff;
+	background-color: #007bff;
+	border-color: #007bff;
+  }
+  
+  .stepper-btn:focus {
+	outline: 0;
+	box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  .stepper-btn:active {
+	background-color: #0062cc;
+	border-color: #005cbf;
+  }
+
+  .minus {
+	color: #dc3545;
+  }
+  
+  .plus {
+	color: #28a745;
+  }
+  
+
+  .stepper p {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin-right: 10px; 
+  }
+
+  .stepper p:hover .tooltiptext2 {
+	visibility: visible;
+  }

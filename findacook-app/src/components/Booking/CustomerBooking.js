@@ -158,14 +158,22 @@ const CustomerBooking = () => {
         placeholderText={'Please select a date'} 
       />
       
-      <input
+      <div class="stepper">
+        <p className=''>For How Many?<span className="tooltiptext2">How many people are you booking for?</span></p>
+  <input type="button" value="-" class="stepper-btn minus" onClick={() => setNumPeople(Math.max(numPeople - 1, 0))} />
+  <input
     type="number"
     id="numPeople"
     name="numPeople"
+    className='numberPeople'
+    placeholder=' '
     value={numPeople}
     max={10}
     onChange={(e) => setNumPeople(e.target.value)}
   />
+  <input type="button" value="+" class="stepper-btn plus" onClick={() => setNumPeople(Math.min(numPeople + 1, 10))} />
+</div>
+
 
 
       <button onClick={handleBooking} className='bookNow'>Book</button>
@@ -210,19 +218,25 @@ const CustomerBooking = () => {
         <h3>{menuItem.dish}</h3>
         <p>{menuItem.dish_description}</p>
         <p>€{menuItem.price.toFixed(2)}</p>
-        <button onClick={() => addToCart(menuItem)}>Add</button>
-        <button onClick={() => removeFromCart(menuItem)}>Remove</button>
+        <button className="accept-btn" onClick={() => addToCart(menuItem)}>Add</button>
+        <button className="decline-btn" onClick={() => removeFromCart(menuItem)}>Remove</button>
       </div>
     ))}
   </div>
   <div class="cart">
-  <h2 class="cart-title">Your Order</h2>
+  <h2 class="cart-title">Your Booking</h2>
   {cart.map((item) => (
     <div class="cart-item" key={item._id}>
       <span class="cart-item-name">{item.dish}</span>
       <span class="cart-item-price">€{item.price.toFixed(2)}</span>
     </div>
   ))}
+  <div class="cart-total">
+    <span class="cart-total-label">Price Per Person:</span>
+    <span class="cart-total-price">€{cart.reduce((total, item) => total + item.price, 0).toFixed(2)}</span>
+  </div>
+
+  <hr />
   <div class="cart-total">
     <span class="cart-total-label">Total:</span>
     <span class="cart-total-price">€{cart.reduce((total, item) => total + item.price, 0).toFixed(2) * numPeople}</span>

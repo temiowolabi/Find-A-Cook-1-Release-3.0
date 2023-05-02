@@ -8,7 +8,7 @@ const AdminCookListPage = () => {
     return(
     <>
 
-<div className="container">
+<div className="adminViewContainer">
 <main>
 			{/* <h1>Users</h1> */}
 			<table className="adminCookDisplay">

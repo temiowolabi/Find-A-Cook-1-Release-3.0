@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar/Navbar';
 import CookList from './components/cooks/CookList';
-import Cook from './components/Something/Cook';
+import Cook from './components/CookDashboard/Cook';
 
 const Home = () => {
     const [firstname, setFirstName] = useState("")

@@ -10,7 +10,7 @@ const Sidebar = () => {
         try {
           const response = await axios.post("https://findacook-backend.onrender.com/user/logout");
           if (response.data.status === "SUCCESS") {
-            alert("Logged out successfully");
+            // alert("Logged out successfully");
             // Redirect user to login or any other appropriate page
             navigate('/')
           } else {
@@ -45,10 +45,6 @@ const Sidebar = () => {
             </ul>
             
             <ul class="logout-mode">
-                <li><a href="/settings">
-                    <i class="uil uil-signout"></i>
-                    <span class="link-name">Settings</span>
-                </a></li>
                 <li><a href="/complete-form">
                     <i class="uil uil-signout"></i>
                     <span class="link-name">Documents</span>

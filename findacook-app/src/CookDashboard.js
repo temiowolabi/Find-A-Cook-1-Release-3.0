@@ -12,7 +12,7 @@ import { FaPinterest } from "react-icons/fa";
 import { FaCertificate } from "react-icons/fa"; 
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
-import CookDashboardComponent from "./components/Something/CookDashboardComponent";
+import CookDashboardComponent from "./components/CookDashboard/CookDashboardComponent";
 //import Maps from './components/Maps';
 
 
