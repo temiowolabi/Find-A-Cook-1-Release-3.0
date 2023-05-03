@@ -17,7 +17,7 @@ const { uploadFile, getFileStream, uploadToS3 } = require('./s3')
 
 //const upload2 = multer({ dest: 'uploads/' })
 
-const upload2 = multer({ dest: '/tmp' })
+//const upload2 = multer({ dest: '/tmp' })
 
 const storageTest = multer.memoryStorage();
 const documentUpload = multer({ storage: storageTest });
@@ -33,89 +33,17 @@ router.get('/images/:key', (req, res) => {
 })
 
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, 'uploads');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads');
   },
-  filename: function (req, file, cb) {
-      cb(null, `${Date.now()}.jpg`);
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + (file.originalname));
   },
 });
 
-var upload = multer({ storage });
+const upload = multer({ storage: storage });
 
-
-// router.post('/images', upload2.single('image'), async (req, res) => {
-//   const file = req.file;
-//   console.log(file); // add this line to see if file is being received
-//   // apply filter
-//   // resize 
-
-//   const result = await uploadFile(file, 'images')
-//   await unlinkFile(file.path)
-//   console.log(result)
-//   const description = req.body.description
-//   res.send({imagePath: `/images/${result.Key}`})
-// });
-
-
-// router.post('/documents', documentUpload.array('document'), async (req, res) => {
-//   try {
-//     const files = req.files;
-//     console.log('Console: ',req.files);
-//     const result = [];
-
-//     const cookId = req.session.cook_id; // get the cookId from the session
-//     console.log("COOK ID YALL",cookId);
-
-//     for (const file of files) {
-//       console.log("req.files:", req.files);
-//       console.log("req.files.document:", req.files.document);
-      
-//       const filename = `${cookId}_${file.originalname}`; // include cookId in the filename
-//       const uploadResult = await uploadToS3(file, 'document', filename); // pass the filename to the uploadToS3 function
-//       result.push(uploadResult);
-//     }
-
-//     res.json({ message: 'Documents uploaded successfully', data: result });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: 'Failed to upload documents' });
-//   }
-// });
-
-
-
-// const s3 = new aws.S3({
-//   accessKeyId: process.env.S3_ACCESS_KEY,
-//   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-//   region: process.env.S3_BUCKET_REGION,
-// })
-
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//       cb(null, 'uploads/');
-//     },
-//     filename: (req, file, cb) => {
-//       cb(null, Date.now() + '-' + file.originalname);
-//     },
-//   });
-
-  // const documentUpload = (bucketName) => multer({
-  //   storage: multerS3({
-  //     s3,
-  //     bucket: bucketName,
-  //     metadata: function (req, file, cb) {
-  //       cb(null, { fieldName: file.fieldName });
-  //     },
-  //     key: function (req, file, cb) {
-  //       cb(null, Date.now().toString())
-  //     }
-  //   })
-  // })
-  
-
-  // const upload = multer({ storage: storage });
 
 require('dotenv').config();
 
@@ -175,13 +103,11 @@ router.post('/cooksignup', (req, res) => {
                 cook_email: cook_email,
                 cook_password: hash,
                 cook_birthday: cook_birthday,
-                cook_bio: "This is the cooks bio",
                 description: "This is the cooks Description",
                 date_joined: currentDate,
                 specialties: [],
                 verified: false,
-                profile_picture: "profile picture",
-                cook_address: "cooks address",
+                profile_picture: "default.jpeg",
                 application_status: "pending",
                 
             });
@@ -257,26 +183,38 @@ router.post('/cooksignin', (req, res) => {
 })
 
 router.get("/cookinfo", (req, res) => {
-    console.log(req.session)
-    const cook = req.session.cook;
-    // console.log(cook);
-    if(cook) {
-        res.json({
-            status: "SUCCESS",
-            firstn: `${cook.cook_first_name}`,
-            lastn: `${cook.cook_last_name}`,
-            special: `${cook.specialties}`,
-            descrip: `${cook.description}`,
-            profile: `${cook.profile_picture}`,
-            bio: `${cook.cook_bio}`,
-            email: `${cook.cook_email}`
-        })
-    } else {
-        res.json({
+  console.log(req.session);
+  const cook = req.session.cook;
+  // console.log(cook);
+
+  if (cook) {
+    Cook.findOne({ _id: cook._id })
+      .populate("specialties")
+      .exec((err, populatedCook) => {
+        if (err) {
+          res.json({
             status: "FAILED",
-            message: "Error finding user"
-        })
-    }
+            message: "Error finding user",
+          });
+        } else {
+          res.json({
+            status: "SUCCESS",
+            firstn: `${populatedCook.cook_first_name}`,
+            lastn: `${populatedCook.cook_last_name}`,
+            special: populatedCook.specialties,
+            descrip: `${populatedCook.description}`,
+            profile: `${populatedCook.profile_picture}`,
+            bio: `${populatedCook.cook_bio}`,
+            email: `${populatedCook.cook_email}`,
+          });
+        }
+      });
+  } else {
+    res.json({
+      status: "FAILED",
+      message: "Error finding user",
+    });
+  }
 });
 
 router.get("/allcooks", async (req, res) => {
@@ -317,6 +255,18 @@ router.get("/allcooks", async (req, res) => {
       console.log(err);
     }
   });
+
+  router.get('/menuitems', async (req, res) => {
+    try {
+      const cookId = req.session.cook._id;
+      const menuItems = await Menu.find({ cook: cookId }).populate('category');
+      res.json({ status: 'SUCCESS', menuItems });
+    } catch (err) {
+      res.json({ status: 'FAILED', message: 'Error retrieving menu items' });
+      console.log(err);
+    }
+  });
+  
 
   router.get("/menu/cook/:cookId", async (req, res) => {
     try {
@@ -411,69 +361,69 @@ router.get("/allcooks", async (req, res) => {
 
 
 
-  router.post('/addmenuitem', upload2.single('imageurls'), async (req, res) => {
-    const cook = req.session.cook;
+  // router.post('/addmenuitem', upload.single('imageurls'), async (req, res) => {
+  //   const cook = req.session.cook;
   
-    if (!cook) {
-      return res.json({
-        status: 'FAILED',
-        message: 'Not authorized to add menu items',
-      });
-    }
+  //   if (!cook) {
+  //     return res.json({
+  //       status: 'FAILED',
+  //       message: 'Not authorized to add menu items',
+  //     });
+  //   }
   
-    const { dish, dish_description, price, category } = req.body;
-    // const imageurls = req.file ? req.file.path : null;
-    const imageurls = req.file;
-    console.log(imageurls); // add this line to see if file is being received
+  //   const { dish, dish_description, price, category } = req.body;
+  //   // const imageurls = req.file ? req.file.path : null;
+  //   const imageurls = req.file;
+  //   console.log(imageurls); // add this line to see if file is being received
   
-    const result = await uploadFile(imageurls, 'images')
-    await unlinkFile(imageurls.path)
-    console.log(result)
-    const description = req.body.description
-    res.send({imagePath: `/images/${result.Key}`})
-    try {
-      // Create a new product in Stripe
-      const product = await stripe.products.create({
-        name: dish,
-        type: 'good',
-      });
+  //   const result = await uploadFile(imageurls, 'images')
+  //   await unlinkFile(imageurls.path)
+  //   console.log(result)
+  //   const description = req.body.description
+  //   res.send({imagePath: `/images/${result.Key}`})
+  //   try {
+  //     // Create a new product in Stripe
+  //     const product = await stripe.products.create({
+  //       name: dish,
+  //       type: 'good',
+  //     });
   
-      // Create a new price for the product in Stripe
-      const stripePrice = await stripe.prices.create({
-        product: product.id,
-        unit_amount: price * 100, // Stripe requires the price in cents
-        currency: 'eur',
-      });
+  //     // Create a new price for the product in Stripe
+  //     const stripePrice = await stripe.prices.create({
+  //       product: product.id,
+  //       unit_amount: price * 100, // Stripe requires the price in cents
+  //       currency: 'eur',
+  //     });
   
-      const newDish = {
-        dish: dish,
-        dish_description: dish_description,
-        price: price,
-        category: category,
-        imageurls: imageurls,
-        stripe_product_id: product.id, // Save the product ID in your database
-        stripe_price_id: stripePrice.id, // Save the price ID in your database
-      };
+  //     const newDish = {
+  //       dish: dish,
+  //       dish_description: dish_description,
+  //       price: price,
+  //       category: category,
+  //       imageurls: imageurls,
+  //       stripe_product_id: product.id, // Save the product ID in your database
+  //       stripe_price_id: stripePrice.id, // Save the price ID in your database
+  //     };
   
-      const updatedCook = await Cook.findByIdAndUpdate(
-        cook._id,
-        { $push: { dishes: newDish } },
-        { new: true }
-      );
+  //     const updatedCook = await Cook.findByIdAndUpdate(
+  //       cook._id,
+  //       { $push: { dishes: newDish } },
+  //       { new: true }
+  //     );
   
-      res.json({
-        status: 'SUCCESS',
-        message: 'Menu item added successfully',
-        updatedCook: updatedCook,
-      });
-    } catch (err) {
-      res.json({
-        status: 'FAILED',
-        message: 'Error adding menu item',
-        error: err,
-      });
-    }
-  });
+  //     res.json({
+  //       status: 'SUCCESS',
+  //       message: 'Menu item added successfully',
+  //       updatedCook: updatedCook,
+  //     });
+  //   } catch (err) {
+  //     res.json({
+  //       status: 'FAILED',
+  //       message: 'Error adding menu item',
+  //       error: err,
+  //     });
+  //   }
+  // });
   
 
 
@@ -573,9 +523,12 @@ router.get("/allcooks", async (req, res) => {
   // });
   
 
-router.put("/editprofile", (req, res) => {
-    const { cook_first_name, cook_last_name, specialties, description, profile_picture, cook_bio } = req.body;
+router.put("/editprofile", upload.single('profile_picture'), (req, res) => {
+  console.log("req.body", req.body);
+    const { cook_first_name, cook_last_name, description } = req.body;
+    const profile_picture = req.file.filename;
     const cook = req.session.cook;
+    console.log("cook", cook);
   
     if (cook) {
       Cook.updateOne(
@@ -584,14 +537,18 @@ router.put("/editprofile", (req, res) => {
           $set: {
             cook_first_name: cook_first_name,
             cook_last_name: cook_last_name,
-            specialties: specialties,
-            description: description,
             profile_picture: profile_picture,
-            cook_bio: cook_bio,
+            description: description
           },
         }
       )
         .then((result) => {
+          req.session.cook.cook_first_name = cook_first_name;
+          req.session.cook.cook_last_name = cook_last_name;
+          req.session.cook.profile_picture = profile_picture;
+          req.session.cook.description = description;
+
+          console.log("result", result);
           res.json({
             status: "SUCCESS",
             message: "Profile updated successfully",
@@ -616,7 +573,7 @@ router.put("/editprofile", (req, res) => {
     const cook = req.session.cook;
     
     if (cook) {
-      const profile_picture = req.file.path;
+      const profile_picture = req.file.filename;
   
       try {
         await Cook.updateOne({ _id: cook._id }, { $set: { profile_picture } });
@@ -666,41 +623,30 @@ router.put("/editprofile", (req, res) => {
   router.post('/documents', documentUpload.array('document'), async (req, res) => {
     try {
       const files = req.files;
-      console.log('Console: ',req.files);
+      console.log('Console: ', req.files);
       const result = [];
       const cook = req.session.cook;
-      const fromEmail = cook.cook_email;
-      const from = `Your Cooks <${fromEmail}>`;
   
-      for (const file of files) {
-        console.log("req.files:", req.files);
-        console.log("req.files.document:", req.files.document);
-        
-        const filename = `${cook._id}_${file.originalname}`; // include cookId in the filename
-        const uploadResult = await uploadToS3(file, 'document', filename); // pass the filename to the uploadToS3 function
-        result.push(uploadResult);
-
-
-        const mailOptions = {
-          from,
-          to: 'temiowolabi8@gmail.com',
-          subject: 'New Document Uploaded',
-          html: `Cook ${cook.cook_first_name} ${cook.cook_last_name} (ID: ${cook._id}) has uploaded a new document: ${filename}`,
-          attachments: req.files.map(file => ({
-            filename: file.originalname,
-            content: file.buffer
-          }))
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log('Email sent: ' + info.response);
-          }
-        });
-      
-      }
+      const attachments = files.map((file) => ({
+        filename: file.originalname,
+        content: file.buffer,
+      }));
+  
+      const mailOptions = {
+        from: process.env.AUTH_EMAIL,
+        to: 'santosodigie104@gmail.com',
+        subject: 'New Documents Uploaded',
+        html: `Cook ${cook.cook_first_name} ${cook.cook_last_name} (ID: ${cook._id}) has uploaded new documents.`,
+        attachments: attachments,
+      };
+  
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
   
       res.json({ message: 'Documents uploaded successfully', data: result });
     } catch (err) {
@@ -708,6 +654,7 @@ router.put("/editprofile", (req, res) => {
       res.status(500).json({ error: 'Failed to upload documents' });
     }
   });
+  
 
 
   // router.put('/:id/applicationstatus', async (req, res) => {
@@ -1234,6 +1181,7 @@ router.post('/dishy', upload.single('imageurls'), async (req, res) => {
 
   console.log('Request body:', req.body);
   const { dish, dish_description, price, category } = req.body;
+  const imageurls = req.file.filename;
   console.log('New Dish: ', req.body)
 
   const product = await stripe.products.create({
@@ -1255,9 +1203,10 @@ router.post('/dishy', upload.single('imageurls'), async (req, res) => {
       dish_description: dish_description,
       price: price,
       category: category,
-      imageurls: req.file ? req.file.path : null,
+      // imageurls: req.file ? req.file.path : null,
       stripe_product_id: product.id, // Save the product ID in your database
       stripe_price_id: stripePrice.id, // Save the price ID in your database
+      imageurls: imageurls,
     })
     // dish.cook_id = cook._id;
     await newDish.save();
