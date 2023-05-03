@@ -8,10 +8,11 @@ function AddMenuItem() {
     dish_description: '',
     price: '',
     category: '',
-    imageurls: null,
+    //imageurls: null,
   });
 
   const [categories, setCategories] = useState([]);
+  const [image, setImage] = useState(null)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,25 +44,25 @@ function AddMenuItem() {
     setForm({ ...form, category: selectedCategories });
   };
   
-
-  
-  const handleImageChange = (e) => {
-    const fileList = e.target.files[0];
-    setForm({ ...form, imageurls: fileList });
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0]);
   };
+  
+  // const handleImageChange = (e) => {
+  //   const fileList = e.target.files[0];
+  //   setForm({ ...form, imageurls: fileList });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     
     const formData = new FormData();
-    Object.entries(form).forEach(([key, value]) => {
-        if (key === 'imageurls' && value) {
-          formData.append('imageurls', value);
-        } else {
-          formData.append(key, value);
-        }
-      });
+    formData.append('dish', form.dish);
+    formData.append('dish_description', form.dish_description);
+    formData.append('price', form.price);
+    formData.append('category', form.category);
+    formData.append('imageurls', image);
   
     try {
         const config = {
@@ -141,7 +142,7 @@ function AddMenuItem() {
           <input
             type="file"
             name="imageurls"
-            onChange={handleImageChange}
+            onChange={handleFileChange}
           />
         </div>
         <button type="submit">Add Menu Item</button>

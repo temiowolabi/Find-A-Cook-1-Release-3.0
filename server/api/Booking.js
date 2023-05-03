@@ -183,13 +183,14 @@ router.get('/cook/:cookId', async (req, res) => {
     const cookId = req.session.cook._id;
   
     try {
-      const bookings = await Booking.find({ cook: cookId });
+      const bookings = await Booking.find({ cook: cookId }).populate('user');
       res.json({ status: 'SUCCESS', bookings });
     } catch (err) {
       console.error('Error fetching bookings for cook:', err);
       res.status(500).json({ status: 'FAILED', message: 'Error fetching bookings for cook' });
     }
-  });
+});
+
   
 
 module.exports = router;

@@ -56,12 +56,19 @@ const CookDashboard = () => {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [specialities, setSpecialities] = useState("");
   const [description, setDescription] = useState("");
   const [profile, setProfile] = useState("");
+  const [menuItem, setMenuItem] = useState(null);
+  const [specialities, setSpecialities] = useState([]);
+
+
   axios.defaults.withCredentials = true
   useEffect(()=> {
-      axios.get('http://localhost:5001/cook/cookinfo')
+      axios.get('http://localhost:5001/cook/cookinfo', {
+        params: {
+          populate: "specialties",
+        },
+      })
       .then((res) => {
           setFirstName(res.data.firstn);
           setLastName(res.data.lastn);
@@ -75,6 +82,17 @@ const CookDashboard = () => {
           console.error(err);
       });
   }, [])
+
+  useEffect(() => {
+    axios.get('http://localhost:5001/cook/menuitems')
+      .then((res) => {
+        setMenuItem(res.data.menuItem);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+  
   
     return (
 <>
@@ -87,7 +105,7 @@ const CookDashboard = () => {
                  <h4 class="header-title mt-0">Personal Information</h4>
                  <div class="panel-body">
                    <p class="text-muted font-13">
-                     Hi, I'm {firstname} {lastname}. {description}
+                     hello, I'm {firstname} {lastname}. {description}
                    </p>
                    <hr />
                    <div class="text-left">
@@ -106,7 +124,7 @@ const CookDashboard = () => {
                            class="flag-icon flag-icon-us m-r-5 m-t-0"
                            title="us"
                          ></span>
-                         <span>{specialities}</span>{" "}
+                         <span>{specialities.map((item) => item.category_name).join(", ")}</span>{" "}
                        </span>
                      </p>
                    </div>
@@ -118,7 +136,9 @@ const CookDashboard = () => {
                  <div class="col-sm-4">
                    <div className="cook-img-container">
                      <div className="cook-dash-img">
-                       <img src={profile} alt="" />
+                       <img 
+                       src={`http://localhost:5001/${profile}`}
+                       alt="" />
                      </div>
                    </div>
                  </div>
@@ -128,23 +148,6 @@ const CookDashboard = () => {
  
      </section>
 
-
-
-     {/* <div className="personal-form-body">
-        <main className="personal-form-container">
-        <section className="personal-form-section">
-          <h2>Personal Information</h2>
-          <form encType="multipart/form-data" method="POST" action="/cook/documents" onSubmit={submit} className="personal-form">
-        <label for="other">Other</label>
-        <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Other" accept=".pdf" /> <br />
-
-
-        <a href="/submit"><button className="applicationBtn">Apply</button></a>
-
-      </form>
-        </section>
-        </main>
-      </div> */}
 
 </>
     );

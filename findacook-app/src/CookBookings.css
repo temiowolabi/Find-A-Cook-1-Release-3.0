@@ -1,0 +1,27 @@
+.bookings-container {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .booking {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .booking-user {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .booking-date {
+    margin-bottom: 5px;
+  }
+  
+  .booking-price {
+    font-weight: bold;
+  }
+  

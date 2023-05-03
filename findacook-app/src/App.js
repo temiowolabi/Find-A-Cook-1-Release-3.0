@@ -46,6 +46,8 @@ import MauriceMenu from './MauriceMenu';
 import JulianMenu from './JulianMenu';
 import MortMenu from './MortMenu';
 import AddMenu from './AddMenuItem';
+import CustomerBookings from './CustomerBookings';
+import CookBookings from './CookBookings';
 
 function App() {
 
@@ -99,6 +101,7 @@ function App() {
       <Route path="/faq" element={<FAQ />} />
       <Route path="/contactus" element={<Contact />} />
       <Route path="/cook-profile/:cookId" element={<CookProfile />} />
+      <Route path="/cookbookings" element={<CookBookings />} />
   </Routes>
     </div>
   );

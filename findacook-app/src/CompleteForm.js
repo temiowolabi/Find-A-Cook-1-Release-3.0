@@ -18,7 +18,7 @@ async function postImage({documents, description}) {
     },
   };
 
-  const result = await axios.post('https://findacook-backend.onrender.com/cook/documents', formData, config);
+  const result = await axios.post('http://localhost:5001/cook/documents', formData, config);
   return result.data;
 }
 
@@ -43,30 +43,6 @@ const CompleteForm = () => {
     };
   return (
     <>
-      {/* <nav className="thing1">
-        <div className="formLogo">
-          <a href="/">
-            <img src="./images/logo-new-edit-01.png" />
-          </a>
-        </div>
-      </nav>
-
-      <div className="personal-form-body">
-        <main className="personal-form-container">
-        <section className="personal-form-section">
-          <h2>Personal Information</h2>
-          <form encType="multipart/form-data" method="POST" action="/cook/documents" onSubmit={submit} className="personal-form">
-        <label for="other">Other</label>
-        <input type="file" name="document" multiple onChange={(e) => fileSelected(e)} placeholder="Other" accept=".pdf" /> <br />
-
-
-        <a href="/submit"><button className="applicationBtn">Apply</button></a>
-
-      </form>
-        </section>
-        </main>
-
-      </div> */}
 
       
 

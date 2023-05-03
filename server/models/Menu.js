@@ -28,7 +28,7 @@ const menus = new Schema(
     },
     imageurls: {
             type: String,
-            required: true,
+            //required: true,
         },
     // imageurls: String,
     // currentbookings: []

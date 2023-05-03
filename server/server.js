@@ -135,7 +135,7 @@ app.use(express.json());
 app.use('/user', UserRouter)
 app.use('/cook', CookRouter)
 app.use('/schedule', ScheduleRouter)
-app.use('/uploads', express.static('uploads'));
+app.use(express.static('uploads'));
 app.use('/booking', bookingRoutes)
 
 app.listen(port, () => {

@@ -33,7 +33,7 @@ const Sidebar = () => {
                 <li><a href="/cookdashboard">
                     <span class="link-name">🧑🏻‍🍳 Dashboard</span>
                 </a></li>
-                {/* <li><a href="/bookings">
+                <li><a href="/cookbookings">
                     <span class="link-name">📖 View Bookings</span>
                 </a></li>
                 <li><a href="/menu">

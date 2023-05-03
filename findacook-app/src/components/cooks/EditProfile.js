@@ -45,7 +45,7 @@ const EditProfileForm = () => {
   }
 
   return (
-    <form className= "EditForm"onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', width: '300px', gap: '10px' }}>
+    <form className= "EditForm"onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', width: '300px', gap: '10px', marginLeft: '250px'}}>
       
         First Name:
         <input
