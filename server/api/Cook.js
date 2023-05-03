@@ -216,12 +216,7 @@ router.post('/cooksignin', (req, res) => {
         Cook.find({cook_email})
         .then(data => {
             if (data.length) {
-                if (!data[0].verified) {
-                    res.json({
-                        status: "FAILED",
-                        message: "You have not been verified yet, please await a response from our team"
-                    })
-                } else {
+
                     const hashedPassword = data[0].cook_password;
                     bcrypt.compare(cook_password, hashedPassword).then(result => {
                         if (result) {
@@ -245,7 +240,7 @@ router.post('/cooksignin', (req, res) => {
                             message: "An error occurred while comparing passwords"
                         })
                     })
-                }
+                
             } else {
                 res.json({
                     status: "FAILED",

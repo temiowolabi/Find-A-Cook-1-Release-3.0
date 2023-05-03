@@ -33,12 +33,12 @@ const Sidebar = () => {
                 <li><a href="/cookdashboard">
                     <span class="link-name">🧑🏻‍🍳 Dashboard</span>
                 </a></li>
-                <li><a href="/bookings">
+                {/* <li><a href="/bookings">
                     <span class="link-name">📖 View Bookings</span>
                 </a></li>
                 <li><a href="/menu">
                     <span class="link-name">🍔 View Menu</span>
-                </a></li>
+                </a></li> */}
                 <li><a href="/addmenu">
                     <span class="link-name">🌭 Add Menu Item</span>
                 </a></li>

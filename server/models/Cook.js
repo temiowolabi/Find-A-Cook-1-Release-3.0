@@ -58,10 +58,6 @@ const cooks = new mongoose.Schema(
         profile_picture: {
             type: String,
             required: true,
-        },
-        cook_bio: {
-            type: String,
-            required: true,
         }
     },
     { timestamps: true }

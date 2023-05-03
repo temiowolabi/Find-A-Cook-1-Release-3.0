@@ -4,6 +4,7 @@ const Cook = require('./../models/Cook')
 const nodemailer = require('nodemailer');
 const Booking = require('./../models/Booking');
 
+
 let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -26,6 +27,30 @@ router.post('/create', async (req, res) => {
       menuItems: menuItems.map(item => item._id),
       totalPrice,
     });
+
+const session = await stripe.checkout.sessions.create({
+  payment_method_types: ['card'],
+  line_items: [{
+    price_data: {
+      currency: 'usd',
+      product_data: {
+        name: 'Booking',
+        metadata: {
+          cook_id: cook_id,
+          num_people: num_people,
+          menu_items: JSON.stringify(menuItems),
+        },
+      },
+      unit_amount: totalPrice * 100,
+    },
+    quantity: 1,
+  }],
+  mode: 'payment',
+  success_url: 'https://your-website.com/success',
+  cancel_url: 'https://your-website.com/cancel',
+});
+
+res.json({ id: session.id });
 
     const mailOptionsUser = {
       from: process.env.AUTH_EMAIL,
